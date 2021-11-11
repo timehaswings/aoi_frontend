@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, getCurrentInstance } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -16,6 +16,8 @@ export default {
         });
         onMounted(() => {
             console.log(store.state.common.notifyMsg);
+            const { proxy } = getCurrentInstance();
+            console.log(proxy.$api);
             // store.dispatch('addCount')
         });
         let add = () => {
