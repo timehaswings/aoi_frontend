@@ -1,3 +1,5 @@
+@charset "utf-8";
+@import url(./theme.css);
 /* 大屏幕 ：大于等于1200px*/
 @media (min-width: 1200px) {
   .backend-aside {
@@ -5,7 +7,7 @@
   }
 
   .backend-aside--collapse {
-    width: 60px;
+    width: 64px;
   }
 }
 
@@ -16,7 +18,7 @@
   }
 
   .backend-aside--collapse {
-    width: 60px;
+    width: 64px;
   }
 }
 
@@ -27,29 +29,33 @@
   }
 
   .backend-aside--collapse {
-    width: 60px;
+    width: 64px;
   }
 }
 
 /* 横向放置的手机和竖向放置的平板之间的分辨率 */
 @media (max-width: 767px) {
   .backend-aside {
-    width: 240px;
+    width: 0;
+    display: none;
   }
 
   .backend-aside--collapse {
-    width: 60px;
+    width: 0;
+    display: none;
   }
 }
 
 /* 横向放置的手机及分辨率更小的设备 */
 @media (max-width: 480px) {
   .backend-aside {
-    width: 220px;
+    width: 0;
+    display: none;
   }
 
   .backend-aside--collapse {
-    width: 60px;
+    width: 0;
+    display: none;
   }
 }
 
@@ -70,4 +76,47 @@ body,
 
 body {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
+.v-middle {
+  vertical-align: middle;
+}
+
+/** 左右布局容器 */
+.left-right-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/** 横向导航布局 */
+.h-nav ul {
+  list-style: none;
+  height: var(--header-height);
+  line-height: var(--header-height);
+  position: relative;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.h-nav li {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--header-height);
+  padding: 0 5px;
+  margin: 0;
+}
+
+.h-nav a {
+  text-decoration: none;
+}
+
+.h-nav li:hover {
+  background-color: var(--el-color-primary-light-8);
+  cursor: pointer;
 }

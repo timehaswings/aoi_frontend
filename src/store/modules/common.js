@@ -1,22 +1,21 @@
 const common = {
-    state: {
-        notifyMsg: 'hello world',
-        isCollapse: false,
+  state: {
+    notifyMsg: 'hello world',
+    isCollapse: false,
+  },
+  mutations: {
+    COLLAPSE: (state) => {
+      state.isCollapse = true;
     },
-    mutations: {
-        COLLAPSE: (state) => {
-            state.isCollapse = true;
-        },
-        OPEN: (state) => {
-            state.isCollapse = false;
-        }
+    OPEN: (state) => {
+      state.isCollapse = false;
     },
-    getters: {
-        
+    TOGGLE: (state) => {
+      state.isCollapse = !state.isCollapse;
     },
-    actions: {
+  },
+  getters: {},
+  actions: {},
+};
 
-    }
-}
-
-export default common
+export default common;
