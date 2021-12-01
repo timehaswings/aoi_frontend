@@ -1,24 +1,49 @@
 <template>
   <div class="left-right-wrapper">
-    <div>后台管理</div>
-    <!-- <el-menu mode="horizontal" background-color="transparent">
-      <el-menu-item index="1">通知</el-menu-item>
-      <el-menu-item index="2">设置</el-menu-item>
-      <el-menu-item index="3">下午好，xxx</el-menu-item>
-      <el-menu-item index="4">退出登录</el-menu-item>
-    </el-menu> -->
-    <ul class="h-nav">
-      <li><a>首页</a></li>
-      <li><a>课程介绍</a></li>
-      <li><a>师资力量</a></li>
-      <li><a>新闻动态</a></li>
-      <li><a>联系我们</a></li>
+    <div class="header-title">后台管理</div>
+    <ul class="horizontal-nav header-nav">
+      <li>
+        <el-icon :size="16" class="pr5"> <share /></el-icon><span>分享</span>
+      </li>
+      <li>
+        <el-icon :size="16" class="pr5"> <notification /></el-icon><span>通知</span>
+      </li>
+      <li>
+        <el-icon :size="16" class="pr5"> <setting /></el-icon><span>设置</span>
+      </li>
+      <li>
+        <el-icon :size="16" class="pr5"> <avatar /></el-icon><span>下午好，周杰伦</span>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
-export default {};
+import { Avatar, Setting, Share, Notification } from '@element-plus/icons';
+export default {
+  name: 'BackendHeader',
+  components: {
+    Notification,
+    Avatar,
+    Setting,
+    Share,
+  },
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.header-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f2f6fc;
+}
+
+.header-nav {
+  color: white;
+  font-size: 14px;
+}
+
+.pr5 {
+  padding-right: 5px;
+}
+</style>
