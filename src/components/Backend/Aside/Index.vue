@@ -3,7 +3,7 @@
     <div class="aside-logo">
       <el-avatar :size="logoSize" :src="circleUrl" fit="cover" class="v-middle"></el-avatar>
     </div>
-    <div style="flex: 1; overflow: auto">
+    <div class="nav-container">
       <el-menu
         mode="vertical"
         background-color="transparent"
@@ -94,6 +94,27 @@ export default {
   flex-flow: column;
   height: 100%;
   overflow: hidden;
+}
+
+.nav-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav-container::-webkit-scrollbar {
+  width: 4px;
+  height: 1px;
+}
+
+.nav-container::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: rgba(144, 147, 153, 0.5);
+}
+
+.nav-container::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+  background: transparent;
 }
 
 .aside-logo {

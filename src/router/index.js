@@ -71,6 +71,30 @@ const routes = [
         },
         component: () => import('../views/Backend/Summary.vue'),
       },
+      {
+        path: 'user',
+        name: 'BackendUser',
+        meta: {
+          title: 'BackendUser',
+        },
+        component: () => import('../views/Backend/User.vue'),
+      },
+      {
+        path: 'tag',
+        name: 'BackendTag',
+        meta: {
+          title: 'BackendTag',
+        },
+        component: () => import('../views/Backend/Tag.vue'),
+      },
+      {
+        path: 'category',
+        name: 'BackendCategory',
+        meta: {
+          title: 'BackendCategory',
+        },
+        component: () => import('../views/Backend/Category.vue'),
+      },
     ],
   },
   {

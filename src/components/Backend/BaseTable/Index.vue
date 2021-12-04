@@ -2,14 +2,15 @@
   <div class="base-table">
     <vxe-grid
       ref="xGrid"
-      resizable
       round
+      resizable
       auto-resize
       header-align="center"
       align="center"
       :size="size"
       border
       highlight-hover-row
+      :loading="loading"
       :height="height"
       :form-config="formConfig"
       :toolbar-config="tableToolbar"
@@ -20,9 +21,16 @@
           <p>没有更多数据了！</p>
         </span>
       </template>
+      <template #query_operation>
+        <vxe-button v-if="queryFormItems.length" status="primary" icon="vxe-icon--search" @click="onQuery">查询</vxe-button>
+        <vxe-button status="success" icon="vxe-icon--plus" @click="showAddModal">新增</vxe-button>
+      </template>
       <template #operation="{ row }">
-        <vxe-button type="text" status="primary" @click="showEditModal(row)" icon="vxe-icon--edit-outline">编辑</vxe-button>
-        <vxe-button type="text" status="danger" @click="onDel(row)" icon="el-icon-document-delete">删除</vxe-button>
+        <vxe-button type="text" status="info" @click="showEditModal(row)" icon="vxe-icon--edit-outline">编辑</vxe-button>
+        <vxe-button type="text" status="danger" @click="onDel(row)" icon="vxe-icon--close">删除</vxe-button>
+      </template>
+      <template v-for="(index, name) in $slots" :key="index" #[name]="{ row }">
+        <slot :name="name" :row="row" />
       </template>
       <template #pager>
         <vxe-pager
@@ -35,10 +43,10 @@
         </vxe-pager>
       </template>
     </vxe-grid>
-    <vxe-modal v-model="modalVisible" :title="modalTitle" width="480" height="270" esc-closable show-zoom resize>
-      <vxe-form :data="editForm" :items="editFormItems">
+    <vxe-modal v-model="modalVisible" :title="modalTitle" esc-closable show-zoom resize>
+      <vxe-form :data="editFormData" :items="editFormConfig">
         <template #modal_operation="{ data }">
-          <vxe-button size="small" status="primary">保 存</vxe-button>
+          <vxe-button size="small" status="primary" @click="onSave(data)">保 存</vxe-button>
           <vxe-button size="small" @click="modalVisible = false">关 闭</vxe-button>
         </template>
       </vxe-form>
@@ -54,12 +62,11 @@ export default {
   name: 'BaseTable',
   props: {
     height: {
-      type: Number,
-      default: 500,
+      default: window.innerHeight - 100,
     },
     size: {
       type: String,
-      default: 'size',
+      default: 'small',
     },
     backgroundColor: {
       type: String,
@@ -71,29 +78,27 @@ export default {
         return [];
       },
     },
-    editFormData: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
     editFormItems: {
       type: Array,
       default: () => {
-        return [{ field: '', span: 24, slots: { default: 'modal_operation' } }];
+        return [];
       },
     },
     columns: {
       type: Array,
       default: () => {
-        return [{ title: '测试', field: 'test' }];
+        return [];
       },
     },
     data: {
       type: Array,
       default: () => {
-        return [{ test: 'assd' }];
+        return [];
       },
+    },
+    total: {
+      type: Number,
+      default: 0,
     },
     tableToolbar: {
       type: Object,
@@ -125,31 +130,43 @@ export default {
     const xGrid = ref(null);
     const currentPage = ref(1);
     const pageSize = ref(15);
-    const total = ref(0);
     const loading = ref(false);
     const modalVisible = ref(false);
     const modalTitle = ref('新增');
-    const editForm = ref({});
+    const editFormData = ref({});
+    const formData = {};
+    props.queryFormItems.forEach((item) => {
+      formData[item.field] = item.resetValue;
+    });
+    const formItems = [...props.queryFormItems, { field: '', span: 6, slots: { default: 'query_operation' } }];
+    const formConfig = ref({
+      span: 24,
+      titleColon: true,
+      className: 'table-query-form',
+      data: formData,
+      items: formItems,
+    });
+    const editFormConfig = ref([...props.editFormItems, { field: '', align: 'right', span: 24, slots: { default: 'modal_operation' } }]);
     const onQuery = async () => {
       if (props.queryFunction) {
         loading.value = true;
-        await props.queryFunction({});
+        await props.queryFunction(formConfig.value.data);
         loading.value = false;
       }
     };
-    const onAdd = async () => {
+    const onAdd = async (data) => {
       if (props.queryFunction && props.addFunction) {
         loading.value = true;
-        await props.addFunction({});
-        await props.queryFunction(formConfig.data);
+        await props.addFunction({ ...data });
+        await props.queryFunction(formConfig.value.data);
         loading.value = false;
       }
     };
-    const onUpdate = async () => {
+    const onUpdate = async (data) => {
       if (props.queryFunction && props.updateFunction) {
         loading.value = true;
-        await props.updateFunction({});
-        await props.queryFunction(formConfig.data);
+        await props.updateFunction({ ...data });
+        await props.queryFunction(formConfig.value.data);
         loading.value = false;
       }
     };
@@ -158,8 +175,8 @@ export default {
         const result = await VXETable.modal.confirm('您确定要删除吗？');
         if ('confirm' == result) {
           loading.value = true;
-          await props.delFunction(row);
-          await props.queryFunction({});
+          await props.delFunction({ ...row });
+          await props.queryFunction(formConfig.value.data);
           loading.value = false;
         }
       }
@@ -170,30 +187,26 @@ export default {
       onQuery();
     };
     const showEditModal = (row) => {
-      for (let key in editForm) {
-        editForm[key] = row[key] || editForm[key];
-      }
+      props.editFormItems.forEach((item) => {
+        editFormData.value[item.field] = row[item.field] || item.resetValue;
+      });
       modalTitle.value = '编辑';
       modalVisible.value = true;
     };
     const showAddModal = () => {
-      editForm = { ...props.editFormData };
+      props.editFormItems.forEach((item) => {
+        editFormData.value[item.field] = item.resetValue;
+      });
       modalTitle.value = '新增';
       modalVisible.value = true;
     };
-    const formConfig = computed(() => {
-      const formData = {};
-      props.queryFormItems.forEach((item) => {
-        formData[item.field] = item.resetValue;
-      });
-      return {
-        span: 24,
-        titleColon: true,
-        className: 'table-query-form',
-        data: formData,
-        items: props.queryFormItems,
-      };
-    });
+    const onSave = (data) => {
+      if ('新增' === modalTitle.value) {
+        onAdd(data);
+      } else if ('编辑' === modalTitle.value) {
+        onUpdate(data);
+      }
+    };
     onMounted(() => {
       onQuery();
     });
@@ -208,12 +221,12 @@ export default {
         return { columns: [...props.columns, operation], data: props.data };
       }),
       formConfig,
-      editForm,
+      editFormConfig,
+      editFormData,
       modalVisible,
       modalTitle,
       currentPage,
       pageSize,
-      total,
       loading,
       onQuery,
       onUpdate,
@@ -222,6 +235,7 @@ export default {
       onPageChange,
       showEditModal,
       showAddModal,
+      onSave,
     };
   },
 };
@@ -229,13 +243,16 @@ export default {
 
 <style lang="scss">
 .base-table {
-  margin: 5px 10px;
+  margin: 5px;
 
   .vxe-form,
   .vxe-toolbar,
-  .vxe-table--body-wrapper,
   .vxe-pager,
   .vxe-table--header {
+    background-color: transparent;
+  }
+
+  .vxe-table--body-wrapper {
     background-color: v-bind(backgroundColor);
   }
 }

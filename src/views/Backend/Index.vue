@@ -41,7 +41,6 @@ export default {
 .el-header,
 .el-footer {
   background-color: var(--backend-header-bg-color);
-  color: var(--el-text-color-primary);
 }
 
 .el-header {
