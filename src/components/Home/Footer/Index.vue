@@ -1,20 +1,19 @@
 <template>
-    <el-footer style="margin-top: 20px">Footer</el-footer>
+  <el-footer>Copyright © 2020 Aoi Video. All rights reserved.</el-footer>
 </template>
 
 <script>
 export default {
-    name: "HomeFooter",
-}
+  name: 'HomeFooter',
+};
 </script>
 
 <style scoped>
-
 .el-footer {
-  background-color: #b3c0d1;
-  color: var(--el-text-color-primary);
+  color: var(--el-text-color-regular);
   text-align: center;
-  line-height: 60px;
+  margin-top: 25px;
+  font-size: 14px;
+  color: var(--el-text-color-regular);
 }
-
 </style>

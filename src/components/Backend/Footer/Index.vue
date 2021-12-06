@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'HomeFooter',
+  name: 'BackendFooter',
 };
 </script>
 
@@ -13,5 +13,7 @@ export default {
   color: var(--el-text-color-regular);
   text-align: center;
   margin-top: 25px;
+  font-size: 14px;
+  color: var(--el-text-color-regular);
 }
 </style>
