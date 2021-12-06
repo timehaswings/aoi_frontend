@@ -7,13 +7,15 @@
       auto-resize
       header-align="center"
       align="center"
-      :size="size"
+      size="small"
       border
       highlight-hover-row
       :loading="loading"
       :height="height"
       :form-config="formConfig"
-      :toolbar-config="tableToolbar"
+      :print-config="{}"
+      :export-config="{}"
+      :toolbar-config="toolbarConfig"
       v-bind="gridOptions"
     >
       <template #empty>
@@ -62,11 +64,8 @@ export default {
   name: 'BaseTable',
   props: {
     height: {
-      default: window.innerHeight - 100,
-    },
-    size: {
-      type: String,
-      default: 'small',
+      // default: window.innerHeight - 100,
+      default: 10 * 42 + 176,
     },
     backgroundColor: {
       type: String,
@@ -102,12 +101,7 @@ export default {
     },
     tableToolbar: {
       type: Object,
-      default: () => {
-        return {
-          zoom: true,
-          custom: true,
-        };
-      },
+      default: null,
     },
     queryFunction: {
       type: Function,
@@ -129,7 +123,7 @@ export default {
   setup(props) {
     const xGrid = ref(null);
     const currentPage = ref(1);
-    const pageSize = ref(15);
+    const pageSize = ref(10);
     const loading = ref(false);
     const modalVisible = ref(false);
     const modalTitle = ref('新增');
@@ -219,6 +213,18 @@ export default {
           slots: { default: 'operation' },
         };
         return { columns: [...props.columns, operation], data: props.data };
+      }),
+      toolbarConfig: computed(() => {
+        const defaultConfig = {
+          zoom: true,
+          custom: true,
+          refresh: {
+            query: onQuery,
+          },
+          print: true,
+          export: true,
+        };
+        return props.tableToolbar || defaultConfig;
       }),
       formConfig,
       editFormConfig,
