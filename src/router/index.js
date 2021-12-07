@@ -22,7 +22,7 @@ const routes = [
         component: () => import('../views/Home/Index.vue'),
       },
       {
-        path: '/category',
+        path: 'category',
         name: 'HomeCategory',
         meta: {
           title: 'HomeCategory',
@@ -30,7 +30,7 @@ const routes = [
         component: () => import('../views/Home/Category.vue'),
       },
       {
-        path: '/member',
+        path: 'member',
         name: 'HomeMember',
         meta: {
           title: 'HomeMember',
@@ -38,7 +38,7 @@ const routes = [
         component: () => import('../views/Home/Member.vue'),
       },
       {
-        path: '/personal',
+        path: 'personal',
         name: 'HomePersonal',
         meta: {
           title: 'HomePersonal',
@@ -46,12 +46,20 @@ const routes = [
         component: () => import('../views/Home/Personal.vue'),
       },
       {
-        path: '/about',
+        path: 'about',
         name: 'HomeAbout',
         meta: {
           title: 'HomeAbout',
         },
         component: () => import('../views/Home/About.vue'),
+      },
+      {
+        path: 'details',
+        name: 'Details',
+        meta: {
+          title: 'Details',
+        },
+        component: () => import('../views/Home/Details.vue'),
       },
     ],
   },
