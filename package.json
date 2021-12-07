@@ -9,6 +9,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@cloudgeek/playcore-hls": "^0.1.2",
+    "@cloudgeek/vue3-video-player": "^0.3.7",
     "@element-plus/icons": "0.0.11",
     "animate.css": "^4.1.1",
     "axios": "^0.23.0",
