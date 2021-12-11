@@ -1,14 +1,6 @@
 <template>
   <div class="player-container">
-    <vue3-video-player
-      ref="playerRef"
-      :core="null"
-      :muted="true"
-      @play="onPlay"
-      @pause="onPause"
-      src="https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
-      v-bind="$attrs"
-    ></vue3-video-player>
+    <vue3-video-player ref="playerRef" :core="null" :muted="true" @play="onPlay" @pause="onPause" v-bind="$attrs"></vue3-video-player>
   </div>
 </template>
 
@@ -21,7 +13,7 @@ export default {
   props: {
     height: {
       type: [String, Number],
-      default: '420px',
+      default: '450px',
     },
   },
   setup(props) {
