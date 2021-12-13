@@ -2,32 +2,38 @@
   <div class="category">
     <el-row>
       <el-col :span="24">
-        <el-radio-group v-model="queryParams.category" size="medium">
-          <el-radio-button label="New York"></el-radio-button>
-          <el-radio-button label="Washington"></el-radio-button>
-          <el-radio-button label="Los Angeles"></el-radio-button>
-          <el-radio-button label="Chicago"></el-radio-button>
-        </el-radio-group>
+        <div class="filter-container">
+          <div style="width: 60px"><span>分类：</span></div>
+          <div style="flex-shrink: 0">
+            <el-radio-group v-model="queryParams.category" size="mini">
+              <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.name"></el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
       </el-col>
     </el-row>
     <el-row style="margin-top: 5px">
       <el-col :span="24">
-        <el-radio-group v-model="queryParams.category" size="medium">
-          <el-radio-button label="New York"></el-radio-button>
-          <el-radio-button label="Washington"></el-radio-button>
-          <el-radio-button label="Los Angeles"></el-radio-button>
-          <el-radio-button label="Chicago"></el-radio-button>
-        </el-radio-group>
+        <div class="filter-container">
+          <div style="width: 60px"><span>地区：</span></div>
+          <div style="flex-shrink: 0">
+            <el-radio-group v-model="queryParams.area" size="mini">
+              <el-radio-button v-for="item in areaList" :key="item.code" :label="item.name"></el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
       </el-col>
     </el-row>
     <el-row style="margin-top: 5px">
       <el-col :span="24">
-        <el-radio-group v-model="queryParams.category" size="medium">
-          <el-radio-button label="New York"></el-radio-button>
-          <el-radio-button label="Washington"></el-radio-button>
-          <el-radio-button label="Los Angeles"></el-radio-button>
-          <el-radio-button label="Chicago"></el-radio-button>
-        </el-radio-group>
+        <div class="filter-container">
+          <div style="width: 60px"><span>排序：</span></div>
+          <div style="flex-shrink: 0">
+            <el-radio-group v-model="queryParams.order" size="mini">
+              <el-radio-button v-for="item in orderList" :key="item.code" :label="item.name"></el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
       </el-col>
     </el-row>
     <el-row justify="center" style="margin-top: 20px">
@@ -58,9 +64,30 @@ export default {
   name: 'HomeCategory',
   setup() {
     const queryParams = reactive({
-      category: 'New York',
+      category: null,
+      area: null,
+      order: null,
     });
     const containerId = ref(100);
+    const categoryList = ref([
+      { code: '0', name: '全部' },
+      { code: '1', name: '福利' },
+      { code: '2', name: 'MV' },
+      { code: '3', name: '体育' },
+    ]);
+    const areaList = ref([
+      { code: 'all', name: '全部' },
+      { code: 'china', name: '国产' },
+      { code: 'japan_south_korea', name: '日韩' },
+      { code: 'europe_america', name: '欧美' },
+    ]);
+    const orderList = ref([
+      { code: 'all', name: '默认' },
+      { code: 'update_time', name: '更新时间' },
+      { code: 'popular', name: '人气' },
+      { code: 'views', name: '播放量' },
+      { code: 'praise', name: '点赞数' },
+    ]);
     const blocks = ref([
       { name: '名字1', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 1 },
       { name: '名字2', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 2 },
@@ -79,13 +106,26 @@ export default {
       queryParams,
       containerId,
       blocks,
+      orderList,
+      areaList,
+      categoryList,
     };
   },
 };
 </script>
 
 <style scoped>
+.category {
+  font-size: 14px;
+}
+
 .image-item {
   margin-bottom: 12px;
+}
+
+.filter-container {
+  display: flex;
+  flex-flow: nowrap row;
+  align-items: center;
 }
 </style>
