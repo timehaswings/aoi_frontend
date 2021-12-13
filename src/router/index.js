@@ -109,9 +109,17 @@ const routes = [
     path: '/login',
     name: 'Login',
     meta: {
-      title: '找不到页面',
+      title: '登录',
     },
-    component: () => import('../views/Home/Login.vue'),
+    component: () => import('../views/Auth/Login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    meta: {
+      title: '注册',
+    },
+    component: () => import('../views/Auth/Register.vue'),
   },
   {
     path: '/403',
