@@ -7,6 +7,11 @@
       <el-menu-item v-for="item in menus" :key="item.route" v-show="item.show" :index="item.route"
         ><component :is="icons[item.icon]" class="icon"></component>{{ item.name }}</el-menu-item
       >
+      <el-sub-menu index="#">
+        <template #title><component :is="icons['user-filled']" class="icon"></component>下午好，周杰伦</template>
+        <el-menu-item index="/personal">个人中心</el-menu-item>
+        <el-menu-item index="/logout">退出登录</el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -34,7 +39,6 @@ export default {
       { route: '/category', name: '分 类', icon: 'grid', show: true },
       { route: '/member', name: '会员福利', icon: 'briefcase', show: true },
       { route: '/about', name: '关于我们', icon: 'help-filled', show: true },
-      { route: '/personal', name: '个人中心', icon: 'user-filled', show: true },
     ]);
     return {
       active,
