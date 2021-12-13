@@ -13,6 +13,7 @@
 
 <script>
 import { Grid, HomeFilled, UserFilled, Briefcase, HelpFilled } from '@element-plus/icons';
+import logo from '@/assets/logo.ico';
 import { useRoute } from 'vue-router';
 import { ref, shallowRef } from 'vue';
 
@@ -35,7 +36,6 @@ export default {
       { route: '/about', name: '关于我们', icon: 'help-filled', show: true },
       { route: '/personal', name: '个人中心', icon: 'user-filled', show: true },
     ]);
-    const logo = ref('/favicon.ico');
     return {
       active,
       menus,

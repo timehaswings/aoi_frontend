@@ -35,5 +35,6 @@ export default {
   background-color: #fafafa;
   color: var(--el-text-color-primary);
   padding-bottom: 0;
+  font-size: 14px;
 }
 </style>

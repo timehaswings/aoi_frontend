@@ -6,7 +6,7 @@
           <div style="width: 60px"><span>分类：</span></div>
           <div style="flex-shrink: 0">
             <el-radio-group v-model="queryParams.category" size="mini">
-              <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.name"></el-radio-button>
+              <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.code">{{ item.name }}</el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -18,7 +18,7 @@
           <div style="width: 60px"><span>地区：</span></div>
           <div style="flex-shrink: 0">
             <el-radio-group v-model="queryParams.area" size="mini">
-              <el-radio-button v-for="item in areaList" :key="item.code" :label="item.name"></el-radio-button>
+              <el-radio-button v-for="item in areaList" :key="item.code" :label="item.code">{{ item.name }}</el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -30,7 +30,7 @@
           <div style="width: 60px"><span>排序：</span></div>
           <div style="flex-shrink: 0">
             <el-radio-group v-model="queryParams.order" size="mini">
-              <el-radio-button v-for="item in orderList" :key="item.code" :label="item.name"></el-radio-button>
+              <el-radio-button v-for="item in orderList" :key="item.code" :label="item.code">{{ item.name }}</el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -54,6 +54,11 @@
         </div>
       </el-col>
     </el-row>
+    <el-row justify="right" style="margin-top: 20px">
+      <el-col :span="24">
+        <el-pagination background layout="prev, pager, next" :total="1000"> </el-pagination>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -64,13 +69,13 @@ export default {
   name: 'HomeCategory',
   setup() {
     const queryParams = reactive({
-      category: null,
-      area: null,
-      order: null,
+      category: 'all',
+      area: 'all',
+      order: 'default',
     });
     const containerId = ref(100);
     const categoryList = ref([
-      { code: '0', name: '全部' },
+      { code: 'all', name: '全部' },
       { code: '1', name: '福利' },
       { code: '2', name: 'MV' },
       { code: '3', name: '体育' },
@@ -82,7 +87,7 @@ export default {
       { code: 'europe_america', name: '欧美' },
     ]);
     const orderList = ref([
-      { code: 'all', name: '默认' },
+      { code: 'default', name: '默认' },
       { code: 'update_time', name: '更新时间' },
       { code: 'popular', name: '人气' },
       { code: 'views', name: '播放量' },
@@ -116,7 +121,6 @@ export default {
 
 <style scoped>
 .category {
-  font-size: 14px;
 }
 
 .image-item {
