@@ -13,6 +13,9 @@ const common = {
     TOGGLE: (state) => {
       state.isCollapse = !state.isCollapse;
     },
+    SET_NOTIFY: (state, notifyMsg) => {
+      state.notifyMsg = notifyMsg;
+    },
   },
   getters: {},
   actions: {},
