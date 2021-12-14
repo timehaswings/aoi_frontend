@@ -55,16 +55,16 @@ export default {
       proxy.$api.auth
         .login(formData)
         .then((res) => {
-          console.log(res);
           loading.value = false;
+          store.commit('SET_TOKEN', res.token);
+          store.commit('SET_USER', res.user);
+          router.push('/');
         })
         .catch((err) => {
           loading.value = false;
-          console.log(err);
           proxy.$notify.success({
             title: 'Info',
-            message: 'This is a message without close button',
-            showClose: false,
+            message: 'This is a message without close button'
           });
         });
     };
