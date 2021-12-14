@@ -6,7 +6,7 @@ import request from '../axios';
  */
 export const login = (data) =>
   request({
-    url: '/api/v1/login',
+    url: '/api/v1/token/auth',
     method: 'post',
     data,
   });

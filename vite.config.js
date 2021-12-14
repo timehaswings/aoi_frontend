@@ -15,7 +15,7 @@ export default defineConfig({
       supportTs: false,
       mockPath: 'mock',
       watchFiles: true,
-      localEnabled: true,
+      localEnabled: false,
       prodEnabled: false,
     }),
   ],

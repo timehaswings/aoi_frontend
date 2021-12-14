@@ -1,8 +1,9 @@
 import axios from 'axios';
+import store from '../store';
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_APP_BASE_URL,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
   },
@@ -14,10 +15,10 @@ const service = axios.create({
 // request 拦截器
 service.interceptors.request.use(
   (config) => {
-    const token = 'abcd';
+    const token = store.state.auth.token;
     // 2. 带上token
     if (token) {
-      config.headers.Authorization = 'Token ' + token;
+      config.headers.Authorization = 'JWT ' + token;
     }
     return config;
   },
@@ -98,6 +99,9 @@ service.interceptors.response.use(
         default:
       }
     }
+    if (!err.msg) {
+      err.msg = '网络错误~';
+    }
     return Promise.reject(err); // 返回接口返回的错误信息
   }
 );
@@ -111,24 +115,20 @@ const request = (options) => {
         resolve(res);
       })
       .catch((error) => {
-        // 判断是否时Token过期导致// “TokenExpired”为后台自定义Token过期错误消息
-        // “认证令牌无效。”为框架本身定义的，Token被删除后返回的错误消息
-        if (
-          error &&
-          error.response &&
-          error.response.status == 401 &&
-          (error.response.data.detail == 'TokenExpired' || error.response.data.detail == '认证令牌无效。')
-        ) {
-          logout();
-          return;
-        }
-        if (error && error.response && error.response.status == 401 && error.response.data.msg == 'RefreshTokenExpired') {
-          logout();
-          return;
-        }
-        if (error && error.response && error.response.status == 400 && error.response.data.msg == 'RefreshTokenNotExists') {
-          logout();
-          return;
+        console.log('--');
+        if (error && error.response) {
+          if (error.response.status == 400 && error.response.data.nonFieldErrors) {
+            logout();
+            return;
+          }
+          if (error.response.status == 401 && error.response.data.msg == 'RefreshTokenExpired') {
+            logout();
+            return;
+          }
+          if (error.response.status == 400 && error.response.data.msg == 'RefreshTokenNotExists') {
+            logout();
+            return;
+          }
         }
         reject(error);
       });

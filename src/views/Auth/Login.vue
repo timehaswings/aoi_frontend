@@ -2,16 +2,16 @@
   <div class="login center">
     <div class="login-wrapper">
       <div class="form-title center">用户登录</div>
-      <el-form ref="form" :model="form" label-width="50px">
+      <el-form ref="form" :model="formData" label-width="50px">
         <el-form-item label="账 户">
-          <el-input v-model="form.account" placeholder="请输入账户" status-icon size="small">
+          <el-input v-model="formData.username" placeholder="请输入账户" status-icon size="small">
             <template #prefix>
               <el-icon class="el-input__icon"><user /></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="密 码">
-          <el-input v-model="form.password" placeholder="请输入密码" show-password status-icon size="small">
+          <el-input v-model="formData.password" placeholder="请输入密码" show-password status-icon size="small">
             <template #prefix>
               <el-icon class="el-input__icon"><lock /></el-icon>
             </template>
@@ -28,7 +28,7 @@
 
 <script>
 import { Lock, User } from '@element-plus/icons';
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, reactive, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -43,25 +43,33 @@ export default {
     const store = useStore();
     const router = useRouter();
     const loading = ref(false);
+    const formData = reactive({
+      username: '',
+      password: '',
+    });
     const goRegister = () => {
       router.push('/register');
     };
     const doLogin = () => {
-      console.log('---');
+      loading.value = true;
+      proxy.$api.auth
+        .login(formData)
+        .then((res) => {
+          console.log(res);
+          loading.value = false;
+        })
+        .catch((err) => {
+          loading.value = false;
+          console.log(err);
+          proxy.$notify.success({
+            title: 'Info',
+            message: 'This is a message without close button',
+            showClose: false,
+          });
+        });
     };
-    const form = ref({
-      account: '',
-      password: '',
-    });
-    onMounted(() => {
-      // proxy.$api.auth.login({ account: 'admin', password: '123456' }).then((res) => {
-      //   console.log(res.data);
-      // });
-      store.commit('SET_NOTIFY', '你好，周杰伦');
-      console.log(store.state.common.notifyMsg);
-    });
     return {
-      form,
+      formData,
       goRegister,
       doLogin,
       loading,
