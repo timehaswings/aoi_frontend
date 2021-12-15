@@ -11,7 +11,20 @@ const common = {
       state.user = user;
     },
   },
-  getters: {},
+  getters: {
+    isLogin: (state) => {
+      return state.token ? true : false;
+    },
+    username: (state) => {
+      return state.user ? state.user.username : undefined;
+    },
+    email: (state) => {
+      return state.user ? state.user.email : undefined;
+    },
+    isSuperuser: (state) => {
+      return state.user ? state.user.isSuperuser : false;
+    },
+  },
   actions: {},
 };
 

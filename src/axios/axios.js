@@ -1,5 +1,7 @@
 import axios from 'axios';
+import router from '../router';
 import store from '../store';
+import { ElNotification } from 'element-plus';
 
 // 创建axios实例
 const service = axios.create({
@@ -64,7 +66,7 @@ service.interceptors.response.use(
     if (err && err.response) {
       switch (err.response.status) {
         case 400:
-          err.msg = `请求错误: ${err.response.data.msg}`;
+          err.msg = `身份认证失败: ${err.response.data.msg}`;
           break;
         case 401:
           err.msg = '未授权，请登录';
@@ -100,7 +102,7 @@ service.interceptors.response.use(
       }
     }
     if (!err.msg) {
-      err.msg = '网络错误~';
+      err.msg = '网络错误';
     }
     return Promise.reject(err); // 返回接口返回的错误信息
   }
@@ -115,22 +117,13 @@ const request = (options) => {
         resolve(res);
       })
       .catch((error) => {
-        console.log('--');
+        reject(error);
         if (error && error.response) {
-          if (error.response.status == 400 && error.response.data.nonFieldErrors) {
-            logout();
-            return;
-          }
-          if (error.response.status == 401 && error.response.data.msg == 'RefreshTokenExpired') {
-            logout();
-            return;
-          }
-          if (error.response.status == 400 && error.response.data.msg == 'RefreshTokenNotExists') {
+          if ([400, 401, 403].includes(error.response.status)) {
             logout();
             return;
           }
         }
-        reject(error);
       });
   });
 };
@@ -138,7 +131,18 @@ const request = (options) => {
 /**
  * 退出登录
  */
-const logout = () => {};
+const logout = () => {
+  store.commit('SET_TOKEN', null);
+  store.commit('SET_USER', null);
+  if (router.currentRoute.value.path !== '/login') {
+    router.push('/login');
+  } else {
+    ElNotification.warning({
+      title: '身份验证失败',
+      message: '抱歉，您的账户或者密码出错了',
+    });
+  }
+};
 
 /**
  * url转restful（替换url中的参数）

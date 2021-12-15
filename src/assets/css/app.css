@@ -9,6 +9,10 @@
   .backend-aside--collapse {
     width: 64px;
   }
+
+  .backend-open-nav {
+    display: none;
+  }
 }
 
 /*默认*/
@@ -20,6 +24,10 @@
   .backend-aside--collapse {
     width: 64px;
   }
+
+  .backend-open-nav {
+    display: none;
+  }
 }
 
 /* 平板电脑和小屏电脑之间的分辨率 */
@@ -30,6 +38,10 @@
 
   .backend-aside--collapse {
     width: 64px;
+  }
+
+  .backend-open-nav {
+    display: none;
   }
 }
 
@@ -44,6 +56,10 @@
     width: 0;
     display: none;
   }
+
+  .backend-open-nav {
+    display: inline-block;
+  }
 }
 
 /* 横向放置的手机及分辨率更小的设备 */
@@ -56,6 +72,10 @@
   .backend-aside--collapse {
     width: 0;
     display: none;
+  }
+
+  .backend-open-nav {
+    display: inline-block;
   }
 }
 

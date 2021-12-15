@@ -2,23 +2,23 @@
   <div class="login center">
     <div class="login-wrapper">
       <div class="form-title center">用户注册</div>
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form" :model="formData" label-width="80px">
         <el-form-item label="账 户">
-          <el-input v-model="form.account" placeholder="请输入邮箱/手机" status-icon size="small">
+          <el-input v-model="formData.account" placeholder="请输入邮箱/手机" status-icon size="small">
             <template #prefix>
               <el-icon class="el-input__icon"><user /></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="form.password" placeholder="请输入密码" show-password status-icon size="small">
+          <el-input v-model="formData.password" placeholder="请输入密码" show-password status-icon size="small">
             <template #prefix>
               <el-icon class="el-input__icon"><lock /></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="确认密码">
-          <el-input v-model="form.confirmPassword" placeholder="请再次输入密码" show-password status-icon size="small">
+          <el-input v-model="formData.confirmPassword" placeholder="请再次输入密码" show-password status-icon size="small">
             <template #prefix>
               <el-icon class="el-input__icon"><lock /></el-icon>
             </template>
@@ -54,7 +54,7 @@ export default {
     const doRegister = () => {
       console.log('---');
     };
-    const form = ref({
+    const formData = ref({
       account: '',
       password: '',
       confirmPassword: '',
@@ -65,7 +65,7 @@ export default {
       // });
     });
     return {
-      form,
+      formData,
       loading,
       goLogin,
       doRegister,
