@@ -1,7 +1,7 @@
 <template>
   <div class="aside-wrapper">
     <div class="aside-logo">
-      <el-avatar :size="logoSize" :src="circleUrl" fit="cover" class="v-middle"></el-avatar>
+      <el-avatar :size="logoSize" :src="logo" fit="cover" class="v-middle"></el-avatar>
     </div>
     <div class="nav-container">
       <backend-menu></backend-menu>
@@ -20,6 +20,7 @@
 import { DArrowLeft, DArrowRight } from '@element-plus/icons';
 import { reactive, computed, toRefs } from 'vue';
 import { useStore } from 'vuex';
+import logo from '@/assets/logo.ico';
 import BackendMenu from './Menu.vue';
 
 export default {
@@ -31,16 +32,14 @@ export default {
   },
   setup() {
     const store = useStore();
-    const state = reactive({
-      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-      toggleCollapse() {
-        store.commit('TOGGLE');
-      },
-    });
+    const toggleCollapse = () => {
+      store.commit('TOGGLE');
+    };
     return {
       isCollapse: computed(() => store.state.common.isCollapse),
+      logo,
       logoSize: computed(() => (store.state.common.isCollapse ? 36 : 54)),
-      ...toRefs(state),
+      toggleCollapse,
     };
   },
 };
@@ -91,6 +90,10 @@ export default {
 
 .aside-footer:hover {
   background-color: var(--backend-header-bg-color);
+}
+
+.el-avatar {
+  --el-avatar-background-color: transparent;
 }
 
 .footer-text {

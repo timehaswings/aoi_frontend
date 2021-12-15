@@ -25,14 +25,14 @@ export default {
 <style scoped>
 .el-header,
 .el-footer {
-  background-color: #90a4b7;
+  background-color: var(--home-header-bg-color);
   color: var(--el-text-color-primary);
   text-align: center;
-  line-height: 60px;
+  line-height: var(--home-header-height);
 }
 
 .el-main {
-  background-color: #fafafa;
+  background-color: var(--home-main-bg-color);
   color: var(--el-text-color-primary);
   padding-bottom: 0;
   font-size: 14px;
