@@ -81,7 +81,6 @@ export default {
     };
     const doLogin = () => {
       loginForm.value.validate((valid) => {
-        console.log(valid);
         if (valid) {
           loading.value = true;
           proxy.$api.auth

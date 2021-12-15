@@ -32,3 +32,25 @@ export const verify = (data) =>
     method: 'post',
     data,
   });
+
+/**
+ * 获取验证码
+ * @param {*} data
+ */
+export const captcha = (data) =>
+  request({
+    url: '/api/v1/captcha',
+    method: 'post',
+    data,
+  });
+
+/**
+ * 用户注册
+ * @param {*} data
+ */
+export const register = (data) =>
+  request({
+    url: '/api/v1/register',
+    method: 'post',
+    data,
+  });
