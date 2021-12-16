@@ -70,9 +70,9 @@ export default {
           trigger: 'blur',
         },
         {
-          min: 6,
-          max: 42,
-          message: '邮箱长度应在6~42之间',
+          min: 5,
+          max: 40,
+          message: '邮箱长度应在5~40之间',
           trigger: 'blur',
         },
       ],
@@ -190,7 +190,7 @@ export default {
   width: 100%;
   height: 100%;
   background-size: 100%;
-  background-image: url('~/assets/img/haijing.jpg');
+  background-image: url('@/assets/img/haijing.jpg');
   background-repeat: no-repeat;
   overflow: hidden;
 }

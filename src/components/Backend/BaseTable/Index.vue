@@ -46,7 +46,7 @@
       </template>
     </vxe-grid>
     <vxe-modal v-model="modalVisible" :title="modalTitle" esc-closable show-zoom resize>
-      <vxe-form :data="editFormData" :items="editFormConfig">
+      <vxe-form :title-width="editFormTitleWidth" title-align="right" title-colon :data="editFormData" :items="editFormConfig">
         <template #modal_operation="{ data }">
           <vxe-button size="small" status="primary" @click="onSave(data)">保 存</vxe-button>
           <vxe-button size="small" @click="modalVisible = false">关 闭</vxe-button>
@@ -82,6 +82,10 @@ export default {
       default: () => {
         return [];
       },
+    },
+    editFormTitleWidth: {
+      type: [Number, String],
+      default: 60,
     },
     columns: {
       type: Array,
@@ -153,6 +157,7 @@ export default {
         loading.value = true;
         await props.addFunction({ ...data });
         await props.queryFunction(formConfig.value.data);
+        modalVisible.value = false;
         loading.value = false;
       }
     };
@@ -161,6 +166,7 @@ export default {
         loading.value = true;
         await props.updateFunction({ ...data });
         await props.queryFunction(formConfig.value.data);
+        modalVisible.value = false;
         loading.value = false;
       }
     };
@@ -181,9 +187,11 @@ export default {
       onQuery();
     };
     const showEditModal = (row) => {
+      const tmp = {};
       props.editFormItems.forEach((item) => {
-        editFormData.value[item.field] = row[item.field] || item.resetValue;
+        tmp[item.field] = row[item.field];
       });
+      editFormData.value = { ...row, ...tmp };
       modalTitle.value = '编辑';
       modalVisible.value = true;
     };

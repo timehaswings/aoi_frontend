@@ -8,6 +8,7 @@ const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
+    'Cache-Control': 'no-cache',
   },
   timeout: 180000,
   withCredentials: true,
