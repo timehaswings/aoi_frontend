@@ -148,7 +148,8 @@ export default {
     const onQuery = async () => {
       if (props.queryFunction) {
         loading.value = true;
-        await props.queryFunction(formConfig.value.data);
+        const params = { ...formConfig.value.data, pageSize: pageSize.value, pageNo: currentPage.value };
+        await props.queryFunction(params);
         loading.value = false;
       }
     };
@@ -156,7 +157,8 @@ export default {
       if (props.queryFunction && props.addFunction) {
         loading.value = true;
         await props.addFunction({ ...data });
-        await props.queryFunction(formConfig.value.data);
+        const params = { ...formConfig.value.data, pageSize: pageSize.value, pageNo: currentPage.value };
+        await props.queryFunction(params);
         modalVisible.value = false;
         loading.value = false;
       }
@@ -165,7 +167,8 @@ export default {
       if (props.queryFunction && props.updateFunction) {
         loading.value = true;
         await props.updateFunction({ ...data });
-        await props.queryFunction(formConfig.value.data);
+        const params = { ...formConfig.value.data, pageSize: pageSize.value, pageNo: currentPage.value };
+        await props.queryFunction(params);
         modalVisible.value = false;
         loading.value = false;
       }
@@ -176,7 +179,8 @@ export default {
         if ('confirm' == result) {
           loading.value = true;
           await props.delFunction({ ...row });
-          await props.queryFunction(formConfig.value.data);
+          const params = { ...formConfig.value.data, pageSize: pageSize.value, pageNo: currentPage.value };
+          await props.queryFunction(params);
           loading.value = false;
         }
       }

@@ -3,20 +3,19 @@ import router from '../router';
 import store from '../store';
 import { ElNotification } from 'element-plus';
 
-// 创建axios实例
-const service = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json;charset=UTF-8',
-    'Cache-Control': 'no-cache',
-  },
-  timeout: 180000,
-  withCredentials: true,
-  responseType: 'json',
-});
+// 默认请求连接
+axios.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
+
+// 超时时间（ms）
+axios.defaults.timeout = 10 * 1000;
+// axios请求开启cookie，支持跨域请求携带cookie
+axios.defaults.withCredentials = true;
+// axios 请求头
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.headers.post['Cache-Control'] = 'no-cache';
 
 // request 拦截器
-service.interceptors.request.use(
+axios.interceptors.request.use(
   (config) => {
     const token = store.state.auth.token;
     // 2. 带上token
@@ -47,7 +46,7 @@ service.interceptors.request.use(
 );
 
 // response 拦截器
-service.interceptors.response.use(
+axios.interceptors.response.use(
   (response) => {
     let data;
     // IE9时response.data是undefined，因此需要使用response.request.responseText(Stringify后的字符串)
@@ -110,10 +109,12 @@ service.interceptors.response.use(
 );
 
 const request = (options) => {
+  // 请求处理
+  options.url = toRestUrl(options.url, options.params ? options.params : options.data);
+  // get请求加上时间戳
   return new Promise((resolve, reject) => {
-    // 请求处理
-    options.url = toRestUrl(options.url, options.params ? options.params : options.data);
-    service(options)
+    axios
+      .request(options)
       .then((res) => {
         resolve(res);
       })
