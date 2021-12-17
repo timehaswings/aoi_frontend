@@ -2,22 +2,35 @@
   <div class="left-right-wrapper">
     <div class="header-title">
       <el-icon :size="22" @click="drawer = true" class="header-open backend-open-nav"> <operation /></el-icon>
-      <span style="margin-left: 5px"> 后台管理</span>
+      <span style="margin-left: 5px"> {{ $t('header.backendTitle') }}</span>
     </div>
     <ul class="horizontal-nav header-nav">
       <li @click="goHome">
-        <el-icon :size="16" class="pr5"> <home-filled /></el-icon><span>网站首页</span>
+        <el-icon :size="16" class="pr5"> <home-filled /></el-icon><span>{{ $t('header.home') }}</span>
       </li>
       <li>
-        <el-icon :size="16" class="pr5"> <share /></el-icon><span>分享</span>
+        <el-icon :size="16" class="pr5"> <share /></el-icon><span>{{ $t('header.notify') }}</span>
       </li>
       <li>
-        <el-icon :size="16" class="pr5"> <notification /></el-icon><span>通知</span>
+        <el-popover placement="bottom" trigger="hover" :offset="-10">
+          <div class="vertical-menu">
+            <ul>
+              <li @click="language('zh-cn')">中文</li>
+              <li @click="language('en')">English</li>
+            </ul>
+          </div>
+          <template #reference>
+            <div class="flex-vh-center">
+              <el-icon :size="16" class="pr5"> <notification /></el-icon><span>{{ $t('header.language') }}</span>
+            </div>
+          </template>
+        </el-popover>
       </li>
       <li>
-        <el-icon :size="16" class="pr5"> <user /></el-icon><span>欢迎您，{{ username }}</span>
+        <el-icon :size="16" class="pr5"> <user /></el-icon><span>{{ $t('header.welcome') }}{{ username }}</span>
       </li>
     </ul>
+    <!-- 左侧导航栏 -->
     <el-drawer v-model="drawer" :with-header="false" custom-class="backend-nav-drawer" append-to-body direction="ltr" :size="300">
       <backend-menu :inDrawer="true"></backend-menu>
     </el-drawer>
@@ -25,8 +38,8 @@
 </template>
 
 <script>
-import { User, Setting, Share, Notification, Operation, HomeFilled } from '@element-plus/icons';
-import { ref, computed } from 'vue';
+import { User, Setting, Share, Notification, Operation, HomeFilled, ArrowDown } from '@element-plus/icons';
+import { ref, computed, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import BackendMenu from '../Aside/Menu.vue';
 
@@ -40,16 +53,23 @@ export default {
     Operation,
     HomeFilled,
     BackendMenu,
+    ArrowDown,
   },
   setup() {
-    const drawer = ref(false);
     const store = useStore();
+    const { proxy } = getCurrentInstance();
     const goHome = () => {
       window.open('/', '_blank');
     };
+    const language = (code) => {
+      if (proxy.$i18n.locale !== code) {
+        proxy.$i18n.locale = code;
+      }
+    };
     return {
-      drawer,
+      drawer: ref(false),
       goHome,
+      language,
       username: computed(() => store.getters.username),
     };
   },

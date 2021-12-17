@@ -52,12 +52,18 @@ export default {
           title: '描述',
           itemRender: { name: '$textarea', props: { placeholder: '请输入描述', resize: 'vertical', autosize: { minRows: 4, maxRows: 4 } } },
         },
-        { field: 'sort', span: 24, title: '权重', itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入权重' } } },
+        {
+          field: 'sort',
+          span: 24,
+          title: '权重',
+          resetValue: 100,
+          itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入权重' } },
+        },
         {
           field: 'isActive',
           span: 24,
           title: '激活状态',
-          defaultValue: 'true',
+          resetValue: true,
           itemRender: { name: '$select', options: activeList, props: { placeholder: '请选择激活状态' } },
         },
       ],
@@ -72,8 +78,9 @@ export default {
       data: [],
       total: 0,
       query(params) {
+        const query = { ...params, sort: '-sort,-id' };
         return proxy.$api.category
-          .get(params)
+          .get(query)
           .then((res) => {
             if (res.success) {
               state.data = res.data.rows;

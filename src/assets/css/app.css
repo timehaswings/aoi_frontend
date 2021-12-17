@@ -144,3 +144,49 @@ body {
   color: var(--el-text-color-regular);
   cursor: pointer;
 }
+
+/** 垂直列表 菜单*/
+.vertical-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 12px;
+  word-wrap: break-word;
+}
+
+.vertical-menu ul {
+  border: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 0;
+  background-color: #fff;
+  border: none;
+  border-radius: var(--el-border-radius-base);
+  box-shadow: none;
+}
+
+.vertical-menu li {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  line-height: 30px;
+  padding: 0 15px;
+  margin: 0;
+  font-size: var(--el-font-size-base);
+  color: var(--el-text-color-regular);
+  cursor: pointer;
+  outline: none;
+}
+
+.vertical-menu li:hover {
+  background-color: var(--el-border-color-light);
+  cursor: pointer;
+}
+
+.flex-vh-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

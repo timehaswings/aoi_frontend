@@ -12,7 +12,6 @@ axios.defaults.timeout = 10 * 1000;
 axios.defaults.withCredentials = true;
 // axios 请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-axios.defaults.headers.post['Cache-Control'] = 'no-cache';
 
 // request 拦截器
 axios.interceptors.request.use(

@@ -5,56 +5,178 @@
     :total="state.total"
     :query-form-items="state.queryFormItems"
     :edit-form-items="state.editFormItems"
+    editFormTitleWidth="80"
     :query-function="state.query"
     :add-function="state.add"
     :update-function="state.update"
     :del-function="state.del"
   >
-    <template #row_sex="{ row }">
-      <span v-if="row.sex === 0">男的</span>
-      <span v-if="row.sex === 1">女的</span>
+    <template #row_is_active="{ row }">
+      <el-tag v-if="row.isActive" size="mini" type="success" effect="dark">已激活</el-tag>
+      <el-tag v-else size="mini" type="danger" effect="dark">未激活</el-tag>
     </template>
   </base-table>
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive, getCurrentInstance } from 'vue';
 import BaseTable from '@/components/Backend/BaseTable/Index.vue';
 
 export default {
   components: { BaseTable },
   setup() {
+    const { proxy } = getCurrentInstance();
+    const activeList = [
+      { label: '已激活', value: true },
+      { label: '未激活', value: false },
+    ];
     const state = reactive({
-      queryFormItems: [{ field: 'name', span: 6, title: '名称', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } }],
+      queryFormItems: [
+        {
+          field: 'username',
+          span: 4,
+          title: '用户名',
+          resetValue: null,
+          itemRender: {
+            name: '$input',
+            props: { placeholder: '输入名称' },
+          },
+        },
+        {
+          field: 'isActive',
+          span: 4,
+          title: '激活状态',
+          resetValue: null,
+          itemRender: {
+            name: '$select',
+            options: activeList,
+            props: { placeholder: '请选择激活状态' },
+          },
+        },
+      ],
       editFormItems: [
-        { field: 'name', span: 24, title: '名称1', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-        { field: 'age', span: 24, title: '年龄1', itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+        { field: 'name', span: 24, title: '名称', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+        {
+          field: 'desc',
+          span: 24,
+          title: '描述',
+          itemRender: { name: '$textarea', props: { placeholder: '请输入描述', resize: 'vertical', autosize: { minRows: 4, maxRows: 4 } } },
+        },
+        {
+          field: 'sort',
+          span: 24,
+          title: '权重',
+          resetValue: 100,
+          itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入权重' } },
+        },
+        {
+          field: 'isActive',
+          span: 24,
+          title: '激活状态',
+          resetValue: true,
+          itemRender: { name: '$select', options: activeList, props: { placeholder: '请选择激活状态' } },
+        },
       ],
       columns: [
-        { field: 'name', title: '名称' },
-        { field: 'age', title: '年龄' },
-        { field: 'sex', title: '性别', slots: { default: 'row_sex' } },
+        { field: 'id', title: 'ID' },
+        { field: 'username', title: '用户名' },
+        { field: 'email', title: '邮箱' },
+        { field: 'isActive', title: '激活状态', slots: { default: 'row_is_active' } },
+        { field: 'lastLogin', title: '最近登录' },
+        { field: 'dateJoined', title: '创建日期' },
       ],
-      data: [
-        { name: '张三', age: 18, sex: 0 },
-        { name: '李四', age: 28, sex: 1 },
-      ],
-      total: 10,
+      data: [],
+      total: 0,
       query(params) {
-        console.log('===query===');
-        console.log(params);
+        const query = { ...params, sort: '-id' };
+        return proxy.$api.user
+          .get(query)
+          .then((res) => {
+            if (res.success) {
+              state.data = res.data.rows;
+              state.total = res.data.total;
+            } else {
+              proxy.$notify.warning({
+                title: '失败',
+                message: '获取用户失败：' + res.msg,
+              });
+            }
+          })
+          .catch((err) => {
+            proxy.$notify.error({
+              title: '错误',
+              message: '获取用户失败：' + err.msg,
+            });
+          });
       },
       add(data) {
-        console.log('===add===');
-        console.log(data);
+        return proxy.$api.user
+          .add(data)
+          .then((res) => {
+            if (res.success) {
+              proxy.$notify.success({
+                title: '成功',
+                message: '添加用户成功',
+              });
+            } else {
+              proxy.$notify.warning({
+                title: '失败',
+                message: '添加用户失败：' + res.msg,
+              });
+            }
+          })
+          .catch((err) => {
+            proxy.$notify.error({
+              title: '错误',
+              message: '添加用户失败：' + err.msg,
+            });
+          });
       },
       update(data) {
-        console.log('===update===');
-        console.log(data);
+        return proxy.$api.user
+          .update(data)
+          .then((res) => {
+            if (res.success) {
+              proxy.$notify.success({
+                title: '成功',
+                message: '修改用户成功',
+              });
+            } else {
+              proxy.$notify.warning({
+                title: '失败',
+                message: '修改用户失败：' + res.msg,
+              });
+            }
+          })
+          .catch((err) => {
+            proxy.$notify.error({
+              title: '错误',
+              message: '修改用户失败：' + err.msg,
+            });
+          });
       },
       del(data) {
-        console.log('===del===');
-        console.log(data);
+        return proxy.$api.user
+          .del({ id: data.id })
+          .then((res) => {
+            if (res.success) {
+              proxy.$notify.success({
+                title: '成功',
+                message: '删除用户成功',
+              });
+            } else {
+              proxy.$notify.warning({
+                title: '失败',
+                message: '删除用户失败：' + res.msg,
+              });
+            }
+          })
+          .catch((err) => {
+            proxy.$notify.error({
+              title: '错误',
+              message: '删除用户失败：' + err.msg,
+            });
+          });
       },
     });
     return {

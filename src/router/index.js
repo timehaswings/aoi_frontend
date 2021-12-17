@@ -147,16 +147,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  //已登录
-  if(store.state.auth.token){
-    if(['/login', '/register'].includes(to.path)){
-      return next('/');
-    }
-  }
-  // 未登录 
-  else {
-    return next();
-  }
+  // //已登录
+  // if(store.state.auth.token){
+  //   if(['/login', '/register'].includes(to.path)){
+  //     return next('/');
+  //   }
+  // }
+  // // 未登录
+  // else {
+  //   return next();
+  // }
+  return next();
 });
 
 router.afterEach(() => {

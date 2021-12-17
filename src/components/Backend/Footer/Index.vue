@@ -1,5 +1,5 @@
 <template>
-  <el-footer>Copyright © 2020 Aoi Video. All rights reserved.</el-footer>
+  <el-footer> {{ $t('footer.copyright') }}</el-footer>
 </template>
 
 <script>

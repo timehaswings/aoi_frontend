@@ -2,7 +2,6 @@
   <div class="base-table">
     <vxe-grid
       ref="xGrid"
-      round
       resizable
       auto-resize
       header-align="center"
@@ -19,17 +18,16 @@
       v-bind="gridOptions"
     >
       <template #empty>
-        <span style="color: red">
-          <p>没有更多数据了！</p>
-        </span>
+        <el-empty description="没有更多数据了"></el-empty>
       </template>
       <template #query_operation>
-        <vxe-button v-if="queryFormItems.length" status="primary" icon="vxe-icon--search" @click="onQuery">查询</vxe-button>
-        <vxe-button status="success" icon="vxe-icon--plus" @click="showAddModal">新增</vxe-button>
+        <vxe-button v-if="queryFormItems.length" status="primary" icon="vxe-icon--search" @click="onQuery">{{ $t('table.query') }}</vxe-button>
+        <vxe-button status="warning" icon="el-icon-refresh-left" @click="resetQuery">{{ $t('table.reset') }}</vxe-button>
+        <vxe-button status="success" icon="vxe-icon--plus" @click="showAddModal">{{ $t('table.add') }}</vxe-button>
       </template>
       <template #operation="{ row }">
-        <vxe-button type="text" status="info" @click="showEditModal(row)" icon="vxe-icon--edit-outline">编辑</vxe-button>
-        <vxe-button type="text" status="danger" @click="onDel(row)" icon="vxe-icon--close">删除</vxe-button>
+        <vxe-button type="text" status="info" @click="showEditModal(row)" icon="el-icon-edit">{{ $t('table.edit') }}</vxe-button>
+        <vxe-button type="text" status="danger" @click="onDel(row)" icon="el-icon-delete">{{ $t('table.del') }}</vxe-button>
       </template>
       <template v-for="(index, name) in $slots" :key="index" #[name]="{ row }">
         <slot :name="name" :row="row" />
@@ -48,8 +46,8 @@
     <vxe-modal v-model="modalVisible" :title="modalTitle" esc-closable show-zoom resize>
       <vxe-form :title-width="editFormTitleWidth" title-align="right" title-colon :data="editFormData" :items="editFormConfig">
         <template #modal_operation="{ data }">
-          <vxe-button size="small" status="primary" @click="onSave(data)">保 存</vxe-button>
-          <vxe-button size="small" @click="modalVisible = false">关 闭</vxe-button>
+          <vxe-button size="small" status="primary" @click="onSave(data)">{{ $t('table.save') }}</vxe-button>
+          <vxe-button size="small" @click="modalVisible = false">{{ $t('table.close') }}</vxe-button>
         </template>
       </vxe-form>
     </vxe-modal>
@@ -185,6 +183,13 @@ export default {
         }
       }
     };
+    const resetQuery = () => {
+      props.queryFormItems.forEach((item) => {
+        formData[item.field] = item.resetValue;
+      });
+      formConfig.value.data = formData;
+      onQuery();
+    };
     const onPageChange = ({ currentPage, pageSize }) => {
       pageSize.value = pageSize;
       currentPage.value = currentPage;
@@ -221,7 +226,7 @@ export default {
       gridOptions: computed(() => {
         const operation = {
           title: '操作',
-          minWidth: 150,
+          width: 160,
           slots: { default: 'operation' },
         };
         return { columns: [...props.columns, operation], data: props.data };
@@ -254,6 +259,7 @@ export default {
       showEditModal,
       showAddModal,
       onSave,
+      resetQuery,
     };
   },
 };
