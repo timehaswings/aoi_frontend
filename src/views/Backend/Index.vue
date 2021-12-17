@@ -62,7 +62,7 @@ export default {
 }
 
 .el-main {
-  background-color: #e9eef3;
+  background-color: var(--backend-main-bg-color);
   color: var(--el-text-color-primary);
   transition: width 0.3s, left 0.3s;
 }

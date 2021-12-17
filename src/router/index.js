@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import store from '../store';
 
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false });
 
@@ -146,7 +147,16 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  next();
+  //已登录
+  if(store.state.auth.token){
+    if(['/login', '/register'].includes(to.path)){
+      return next('/');
+    }
+  }
+  // 未登录 
+  else {
+    return next();
+  }
 });
 
 router.afterEach(() => {
