@@ -44,12 +44,14 @@
       </template>
     </vxe-grid>
     <vxe-modal v-model="modalVisible" :title="modalTitle" esc-closable show-zoom resize>
-      <vxe-form :title-width="editFormTitleWidth" title-align="right" title-colon :data="editFormData" :items="editFormConfig">
-        <template #modal_operation="{ data }">
-          <vxe-button size="small" status="primary" @click="onSave(data)">{{ $t('table.save') }}</vxe-button>
-          <vxe-button size="small" @click="modalVisible = false">{{ $t('table.close') }}</vxe-button>
-        </template>
-      </vxe-form>
+      <slot name="edit_form">
+        <vxe-form :title-width="editFormTitleWidth" title-align="right" title-colon :data="editFormData" :items="editFormConfig">
+          <template #modal_operation="{ data }">
+            <vxe-button size="small" status="primary" @click="onSave(data)">{{ $t('table.save') }}</vxe-button>
+            <vxe-button size="small" @click="modalVisible = false">{{ $t('table.close') }}</vxe-button>
+          </template>
+        </vxe-form>
+      </slot>
     </vxe-modal>
   </div>
 </template>

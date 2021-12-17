@@ -55,20 +55,8 @@ export default {
         },
       ],
       editFormItems: [
-        { field: 'name', span: 24, title: '名称', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-        {
-          field: 'desc',
-          span: 24,
-          title: '描述',
-          itemRender: { name: '$textarea', props: { placeholder: '请输入描述', resize: 'vertical', autosize: { minRows: 4, maxRows: 4 } } },
-        },
-        {
-          field: 'sort',
-          span: 24,
-          title: '权重',
-          resetValue: 100,
-          itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入权重' } },
-        },
+        { field: 'username', span: 24, title: '用户名', itemRender: { name: '$input', props: { placeholder: '请输入用户名' } } },
+        { field: 'email', span: 24, title: '邮箱', itemRender: { name: '$input', props: { placeholder: '请输入邮箱' } } },
         {
           field: 'isActive',
           span: 24,
