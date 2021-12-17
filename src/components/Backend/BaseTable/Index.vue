@@ -44,8 +44,15 @@
       </template>
     </vxe-grid>
     <vxe-modal v-model="modalVisible" :title="modalTitle" esc-closable show-zoom resize>
-      <slot name="edit_form">
-        <vxe-form :title-width="editFormTitleWidth" title-align="right" title-colon :data="editFormData" :items="editFormConfig">
+      <slot name="modal_form" :data="editFormData" :modalVisible="modalVisible">
+        <vxe-form
+          :title-width="editFormTitleWidth"
+          :rules="editFormRules"
+          title-align="right"
+          title-colon
+          :data="editFormData"
+          :items="editFormConfig"
+        >
           <template #modal_operation="{ data }">
             <vxe-button size="small" status="primary" @click="onSave(data)">{{ $t('table.save') }}</vxe-button>
             <vxe-button size="small" @click="modalVisible = false">{{ $t('table.close') }}</vxe-button>
@@ -81,6 +88,12 @@ export default {
       type: Array,
       default: () => {
         return [];
+      },
+    },
+    editFormRules: {
+      type: Object,
+      default: () => {
+        return {};
       },
     },
     editFormTitleWidth: {
