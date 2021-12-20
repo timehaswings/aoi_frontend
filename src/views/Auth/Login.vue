@@ -13,10 +13,10 @@
         <el-form-item label="账 户" prop="username">
           <el-input
             v-model="formData.username"
-            @keyup.enter="doLogin"
             placeholder="请输入账户"
             status-icon
             size="small"
+            @keyup.enter="doLogin"
           >
             <template #prefix>
               <el-icon class="el-input__icon"><user /></el-icon>
@@ -26,11 +26,11 @@
         <el-form-item label="密 码" prop="password">
           <el-input
             v-model="formData.password"
-            @keyup.enter="doLogin"
             placeholder="请输入密码"
             show-password
             status-icon
             size="small"
+            @keyup.enter="doLogin"
           >
             <template #prefix>
               <el-icon class="el-input__icon"><lock /></el-icon>
@@ -38,8 +38,8 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" @click="doLogin" size="small">登 录</el-button>
-          <el-button :loading="loading" @click="goRegister" size="small">去注册</el-button>
+          <el-button :loading="loading" size="small" @click="doLogin">登 录</el-button>
+          <el-button :loading="loading" size="small" @click="goRegister">去注册</el-button>
         </el-form-item>
       </el-form>
     </div>

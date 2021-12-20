@@ -4,9 +4,9 @@
       ref="playerRef"
       :core="null"
       :muted="true"
+      v-bind="$attrs"
       @play="onPlay"
       @pause="onPause"
-      v-bind="$attrs"
     ></vue3-video-player>
   </div>
 </template>

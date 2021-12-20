@@ -19,7 +19,7 @@
         <el-breadcrumb-item>{{ item.category }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-row v-for="(o, index) in rows(item.videos)" :key="o" :gutter="20" style="margin-top: 15px">
-        <el-col v-for="col in videoRange(item.videos, index)" :span="24 / carouselConfig.colNumber" :key="col.name">
+        <el-col v-for="col in videoRange(item.videos, index)" :key="col.name" :span="24 / carouselConfig.colNumber">
           <el-card :body-style="{ padding: '0px' }">
             <el-image :src="col.avator" class="image">
               <template #placeholder>

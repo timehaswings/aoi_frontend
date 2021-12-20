@@ -39,15 +39,15 @@
         </el-form-item>
         <el-form-item label="验证码" prop="captchaValue">
           <el-col :span="12">
-            <el-image class="captcha-img" @click="getCaptcha" :src="captchaSrc" fit="contain"></el-image>
+            <el-image class="captcha-img" :src="captchaSrc" fit="contain" @click="getCaptcha"></el-image>
           </el-col>
           <el-col :span="12">
             <el-input v-model="formData.captchaValue" placeholder="输入验证码" size="small" style="margin-left: 15px" />
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" @click="doRegister" size="small">注 册</el-button>
-          <el-button :loading="loading" @click="goLogin" size="small">去登录</el-button>
+          <el-button :loading="loading" size="small" @click="doRegister">注 册</el-button>
+          <el-button :loading="loading" size="small" @click="goLogin">去登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -58,6 +58,7 @@
 import { Lock, User } from '@element-plus/icons';
 import { ref, onMounted, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { Base64 } from 'js-base64';
 
 export default {
@@ -69,6 +70,7 @@ export default {
   setup() {
     const { proxy } = getCurrentInstance();
     const router = useRouter();
+    const store = useStore();
     const registerForm = ref(null);
     const loading = ref(false);
     const captchaSrc = ref('data:image/png;base64, ');

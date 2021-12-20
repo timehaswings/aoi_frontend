@@ -1,7 +1,7 @@
 <template>
   <div class="left-right-wrapper">
     <div class="header-title">
-      <el-icon :size="22" @click="drawer = true" class="header-open backend-open-nav"><operation /></el-icon>
+      <el-icon :size="22" class="header-open backend-open-nav" @click="drawer = true"><operation /></el-icon>
       <span style="margin-left: 5px">{{ $t('header.backendTitle') }}</span>
     </div>
     <ul class="horizontal-nav header-nav">
@@ -41,15 +41,15 @@
       custom-class="backend-nav-drawer"
       append-to-body
       direction="ltr"
-      :size="300"
+      :size="280"
     >
-      <backend-menu :inDrawer="true"></backend-menu>
+      <backend-menu :in-drawer="true"></backend-menu>
     </el-drawer>
   </div>
 </template>
 
 <script>
-import { User, Setting, Share, Notification, Operation, HomeFilled, ArrowDown } from '@element-plus/icons';
+import { User, Share, Notification, Operation, HomeFilled } from '@element-plus/icons';
 import { ref, computed, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import BackendMenu from '../Aside/Menu.vue';
@@ -59,12 +59,10 @@ export default {
   components: {
     Notification,
     User,
-    Setting,
     Share,
     Operation,
     HomeFilled,
     BackendMenu,
-    ArrowDown,
   },
   setup() {
     const store = useStore();

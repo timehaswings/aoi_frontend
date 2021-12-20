@@ -5,7 +5,7 @@
     :total="state.total"
     :query-form-items="state.queryFormItems"
     :edit-form-items="state.editFormItems"
-    editFormTitleWidth="80"
+    edit-form-title-width="80"
     :query-function="state.query"
     :add-function="state.add"
     :update-function="state.update"

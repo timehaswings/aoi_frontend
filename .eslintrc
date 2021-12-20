@@ -2,9 +2,10 @@
   "extends": ["eslint:recommended", "plugin:vue/vue3-recommended", "prettier"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error"
-  },
-  "parserOptions": {
-    "parser": "babel-eslint"
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn",
+    "vue/no-unused-components": "warn",
+    "vue/multi-word-component-names": "off",
+    "vue/no-template-shadow": "off"
   }
 }

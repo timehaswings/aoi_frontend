@@ -30,10 +30,10 @@
         <vxe-button status="success" icon="vxe-icon--plus" @click="showAddModal">{{ $t('table.add') }}</vxe-button>
       </template>
       <template #operation="{ row }">
-        <vxe-button type="text" status="info" @click="showEditModal(row)" icon="el-icon-edit">
+        <vxe-button type="text" status="info" icon="el-icon-edit" @click="showEditModal(row)">
           {{ $t('table.edit') }}
         </vxe-button>
-        <vxe-button type="text" status="danger" @click="onDel(row)" icon="el-icon-delete">
+        <vxe-button type="text" status="danger" icon="el-icon-delete" @click="onDel(row)">
           {{ $t('table.del') }}
         </vxe-button>
       </template>
@@ -42,9 +42,9 @@
       </template>
       <template #pager>
         <vxe-pager
-          :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
+          :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
           :total="total"
           @page-change="onPageChange"
         ></vxe-pager>
@@ -78,6 +78,7 @@ export default {
   name: 'BaseTable',
   props: {
     height: {
+      type: Number,
       // default: window.innerHeight - 100,
       default: 10 * 42 + 176,
     },

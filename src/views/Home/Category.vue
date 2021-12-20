@@ -51,7 +51,7 @@
           item-selector=".image-item"
           :gutter="12"
         >
-          <div v-masonry-tile class="item" v-for="(item, index) in blocks" :key="index">
+          <div v-for="(item, index) in blocks" :key="index" v-masonry-tile class="item">
             <el-card class="image-item" :body-style="{ padding: '0px' }">
               <img :src="item.src" />
               <div style="padding: 14px">
