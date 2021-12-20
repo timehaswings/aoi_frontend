@@ -30,7 +30,7 @@
         <vxe-button type="text" status="danger" @click="onDel(row)" icon="el-icon-delete">{{ $t('table.del') }}</vxe-button>
       </template>
       <template v-for="(index, name) in $slots" :key="index" #[name]="{ row }">
-        <slot :name="name" :row="row" />
+        <slot v-if="!['modal_form'].includes(name)" :name="name" :row="row" />
       </template>
       <template #pager>
         <vxe-pager

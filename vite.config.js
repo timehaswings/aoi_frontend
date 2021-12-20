@@ -12,11 +12,15 @@ export default defineConfig({
   plugins: [
     vue(),
     viteMockServe({
-      supportTs: false,
       mockPath: 'mock',
       watchFiles: true,
-      localEnabled: false,
+      localEnabled: true,
       prodEnabled: false,
+      supportTs: false,
+      injectCode: `
+        import { setupProdMockServer } from './mockProdServer';
+        setupProdMockServer();
+      `,
     }),
   ],
 });

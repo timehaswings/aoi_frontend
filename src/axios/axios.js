@@ -98,10 +98,13 @@ axios.interceptors.response.use(
           err.msg = 'HTTP版本不受支持';
           break;
         default:
+          break;
       }
-    }
-    if (!err.msg) {
-      err.msg = '网络错误';
+    } else if (err && !err.response && err.message) {
+      ElNotification.error({
+        title: '网络异常',
+        message: err.message,
+      });
     }
     return Promise.reject(err); // 返回接口返回的错误信息
   }
