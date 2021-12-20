@@ -104,6 +104,14 @@ const routes = [
         },
         component: () => import('../views/Backend/Category.vue'),
       },
+      {
+        path: 'video',
+        name: 'BackendVideo',
+        meta: {
+          title: 'BackendVideo',
+        },
+        component: () => import('../views/Backend/Video.vue'),
+      },
     ],
   },
   {

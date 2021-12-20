@@ -2,25 +2,8 @@ import dayjs from 'dayjs';
 
 const DATE_REG = 'YYYY-MM-DD';
 const MONTH_REG = 'YYYY-MM';
-const ATTENDANCE_START = 26;
-const ATTENDANCE_END = 25;
 
 const lastDate = dayjs().subtract(1, 'day');
-
-/**
- * 获取当前考勤月
- * @returns [start, end] 返回开始和结束日期
- */
-export function attendanceMonth() {
-  let start, end;
-  end = lastDate;
-  if (lastDate.date() <= ATTENDANCE_END) {
-    start = end.subtract(1, 'month').date(ATTENDANCE_START);
-  } else {
-    start = end.date(ATTENDANCE_START);
-  }
-  return [start.format(DATE_REG), end.format(DATE_REG)];
-}
 
 /**
  * 获取自然年2021-01-01，当月
@@ -50,36 +33,6 @@ export function attennowWeek() {
   end = dayjs().day(7);
   start = dayjs().day(1);
   return [start.format(DATE_REG), end.format(DATE_REG)];
-}
-
-/**
- * 近六个考勤月
- * @returns [start, end] 返回开始和结束日期
- */
-export function last6Month() {
-  let start, end;
-  if (lastDate.date() <= ATTENDANCE_END) {
-    end = lastDate;
-  } else {
-    end = lastDate.add(1, 'month');
-  }
-  start = end.subtract(6, 'month');
-  return [start.format(MONTH_REG), end.format(MONTH_REG)];
-}
-
-/**
- * 近十二个考勤月
- * @returns [start, end] 返回开始和结束日期
- */
-export function last12Month() {
-  let start, end;
-  if (lastDate.date() <= ATTENDANCE_END) {
-    end = lastDate;
-  } else {
-    end = lastDate.add(1, 'month');
-  }
-  start = end.subtract(12, 'month');
-  return [start.format(MONTH_REG), end.format(MONTH_REG)];
 }
 
 /**

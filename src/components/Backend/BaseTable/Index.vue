@@ -50,7 +50,7 @@
         ></vxe-pager>
       </template>
     </vxe-grid>
-    <vxe-modal v-model="modalVisible" :title="modalTitle" esc-closable show-zoom resize>
+    <vxe-modal v-model="modalVisible" :title="modalTitle" :width="modalWidth" esc-closable show-zoom resize>
       <slot name="modal_form" :data="editFormData" :modalVisible="modalVisible">
         <vxe-form
           :title-width="editFormTitleWidth"
@@ -81,6 +81,10 @@ export default {
       type: Number,
       // default: window.innerHeight - 100,
       default: 10 * 42 + 176,
+    },
+    modalWidth: {
+      type: Number,
+      default: null,
     },
     backgroundColor: {
       type: String,
