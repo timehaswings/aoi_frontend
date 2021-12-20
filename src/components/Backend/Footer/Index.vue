@@ -1,5 +1,5 @@
 <template>
-  <el-footer> {{ $t('footer.copyright') }}</el-footer>
+  <el-footer>{{ $t('footer.copyright') }}</el-footer>
 </template>
 
 <script>

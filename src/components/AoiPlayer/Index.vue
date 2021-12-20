@@ -1,6 +1,13 @@
 <template>
   <div class="player-container">
-    <vue3-video-player ref="playerRef" :core="null" :muted="true" @play="onPlay" @pause="onPause" v-bind="$attrs"></vue3-video-player>
+    <vue3-video-player
+      ref="playerRef"
+      :core="null"
+      :muted="true"
+      @play="onPlay"
+      @pause="onPause"
+      v-bind="$attrs"
+    ></vue3-video-player>
   </div>
 </template>
 
@@ -18,11 +25,11 @@ export default {
   },
   setup(props) {
     const playerRef = ref(null);
-    const onPlay = (e) => {
+    const onPlay = e => {
       console.log('=== onPlay ===');
       console.log(e);
     };
-    const onPause = (e) => {
+    const onPause = e => {
       console.log('=== onPause ===');
       console.log(e);
     };

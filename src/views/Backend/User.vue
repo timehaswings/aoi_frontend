@@ -55,8 +55,18 @@ export default {
         },
       ],
       editFormItems: [
-        { field: 'username', span: 24, title: '用户名', itemRender: { name: '$input', props: { placeholder: '请输入用户名' } } },
-        { field: 'email', span: 24, title: '邮箱', itemRender: { name: '$input', props: { placeholder: '请输入邮箱' } } },
+        {
+          field: 'username',
+          span: 24,
+          title: '用户名',
+          itemRender: { name: '$input', props: { placeholder: '请输入用户名' } },
+        },
+        {
+          field: 'email',
+          span: 24,
+          title: '邮箱',
+          itemRender: { name: '$input', props: { placeholder: '请输入邮箱' } },
+        },
         {
           field: 'isActive',
           span: 24,
@@ -79,7 +89,7 @@ export default {
         const query = { ...params, sort: '-id' };
         return proxy.$api.user
           .get(query)
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               state.data = res.data.rows;
               state.total = res.data.total;
@@ -90,7 +100,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '获取用户失败：' + err.msg,
@@ -100,7 +110,7 @@ export default {
       add(data) {
         return proxy.$api.user
           .add(data)
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
@@ -113,7 +123,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '添加用户失败：' + err.msg,
@@ -123,7 +133,7 @@ export default {
       update(data) {
         return proxy.$api.user
           .update(data)
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
@@ -136,7 +146,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '修改用户失败：' + err.msg,
@@ -146,7 +156,7 @@ export default {
       del(data) {
         return proxy.$api.user
           .del({ id: data.id })
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
@@ -159,7 +169,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '删除用户失败：' + err.msg,

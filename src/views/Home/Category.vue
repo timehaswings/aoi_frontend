@@ -6,7 +6,9 @@
           <div style="width: 60px"><span>分类：</span></div>
           <div style="flex-shrink: 0">
             <el-radio-group v-model="queryParams.category" size="mini">
-              <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.code">{{ item.name }}</el-radio-button>
+              <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.code">
+                {{ item.name }}
+              </el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -18,7 +20,9 @@
           <div style="width: 60px"><span>地区：</span></div>
           <div style="flex-shrink: 0">
             <el-radio-group v-model="queryParams.area" size="mini">
-              <el-radio-button v-for="item in areaList" :key="item.code" :label="item.code">{{ item.name }}</el-radio-button>
+              <el-radio-button v-for="item in areaList" :key="item.code" :label="item.code">
+                {{ item.name }}
+              </el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -30,7 +34,9 @@
           <div style="width: 60px"><span>排序：</span></div>
           <div style="flex-shrink: 0">
             <el-radio-group v-model="queryParams.order" size="mini">
-              <el-radio-button v-for="item in orderList" :key="item.code" :label="item.code">{{ item.name }}</el-radio-button>
+              <el-radio-button v-for="item in orderList" :key="item.code" :label="item.code">
+                {{ item.name }}
+              </el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -38,7 +44,13 @@
     </el-row>
     <el-row justify="center" style="margin-top: 20px">
       <el-col :span="24">
-        <div v-masonry="containerId" :horizontal-order="true" transition-duration="0.3s" item-selector=".image-item" :gutter="12">
+        <div
+          v-masonry="containerId"
+          :horizontal-order="true"
+          transition-duration="0.3s"
+          item-selector=".image-item"
+          :gutter="12"
+        >
           <div v-masonry-tile class="item" v-for="(item, index) in blocks" :key="index">
             <el-card class="image-item" :body-style="{ padding: '0px' }">
               <img :src="item.src" />
@@ -56,7 +68,7 @@
     </el-row>
     <el-row justify="right" style="margin-top: 20px">
       <el-col :span="24">
-        <el-pagination background layout="prev, pager, next" :total="1000"> </el-pagination>
+        <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
       </el-col>
     </el-row>
   </div>
@@ -94,18 +106,66 @@ export default {
       { code: 'praise', name: '点赞数' },
     ]);
     const blocks = ref([
-      { name: '名字1', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 1 },
-      { name: '名字2', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 2 },
-      { name: '名字3', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 3 },
-      { name: '名字4', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 4 },
-      { name: '名字5', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 5 },
-      { name: '名字6', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 6 },
-      { name: '名字7', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 7 },
-      { name: '名字8', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 8 },
-      { name: '名字9', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 9 },
-      { name: '名字10', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 10 },
-      { name: '名字11', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 11 },
-      { name: '名字12', src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png', id: 12 },
+      {
+        name: '名字1',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 1,
+      },
+      {
+        name: '名字2',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 2,
+      },
+      {
+        name: '名字3',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 3,
+      },
+      {
+        name: '名字4',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 4,
+      },
+      {
+        name: '名字5',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 5,
+      },
+      {
+        name: '名字6',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 6,
+      },
+      {
+        name: '名字7',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 7,
+      },
+      {
+        name: '名字8',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 8,
+      },
+      {
+        name: '名字9',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 9,
+      },
+      {
+        name: '名字10',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 10,
+      },
+      {
+        name: '名字11',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 11,
+      },
+      {
+        name: '名字12',
+        src: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        id: 12,
+      },
     ]);
     return {
       queryParams,

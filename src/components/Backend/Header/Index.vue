@@ -1,15 +1,17 @@
 <template>
   <div class="left-right-wrapper">
     <div class="header-title">
-      <el-icon :size="22" @click="drawer = true" class="header-open backend-open-nav"> <operation /></el-icon>
-      <span style="margin-left: 5px"> {{ $t('header.backendTitle') }}</span>
+      <el-icon :size="22" @click="drawer = true" class="header-open backend-open-nav"><operation /></el-icon>
+      <span style="margin-left: 5px">{{ $t('header.backendTitle') }}</span>
     </div>
     <ul class="horizontal-nav header-nav">
       <li @click="goHome">
-        <el-icon :size="16" class="pr5"> <home-filled /></el-icon><span>{{ $t('header.home') }}</span>
+        <el-icon :size="16" class="pr5"><home-filled /></el-icon>
+        <span>{{ $t('header.home') }}</span>
       </li>
       <li>
-        <el-icon :size="16" class="pr5"> <share /></el-icon><span>{{ $t('header.notify') }}</span>
+        <el-icon :size="16" class="pr5"><share /></el-icon>
+        <span>{{ $t('header.notify') }}</span>
       </li>
       <li>
         <el-popover placement="bottom" trigger="hover" :offset="-10">
@@ -21,17 +23,26 @@
           </div>
           <template #reference>
             <div class="flex-vh-center">
-              <el-icon :size="16" class="pr5"> <notification /></el-icon><span>{{ $t('header.language') }}</span>
+              <el-icon :size="16" class="pr5"><notification /></el-icon>
+              <span>{{ $t('header.language') }}</span>
             </div>
           </template>
         </el-popover>
       </li>
       <li>
-        <el-icon :size="16" class="pr5"> <user /></el-icon><span>{{ $t('header.welcome') }}{{ username }}</span>
+        <el-icon :size="16" class="pr5"><user /></el-icon>
+        <span>{{ $t('header.welcome') }}{{ username }}</span>
       </li>
     </ul>
     <!-- 左侧导航栏 -->
-    <el-drawer v-model="drawer" :with-header="false" custom-class="backend-nav-drawer" append-to-body direction="ltr" :size="300">
+    <el-drawer
+      v-model="drawer"
+      :with-header="false"
+      custom-class="backend-nav-drawer"
+      append-to-body
+      direction="ltr"
+      :size="300"
+    >
       <backend-menu :inDrawer="true"></backend-menu>
     </el-drawer>
   </div>
@@ -61,7 +72,7 @@ export default {
     const goHome = () => {
       window.open('/', '_blank');
     };
-    const language = (code) => {
+    const language = code => {
       if (proxy.$i18n.locale !== code) {
         proxy.$i18n.locale = code;
       }

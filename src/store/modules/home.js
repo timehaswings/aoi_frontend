@@ -1,16 +1,10 @@
 const common = {
-    state: {
-        title: 'AOI VIDEO'
-    },
-    mutations: {
-        
-    },
-    getters: {
-        
-    },
-    actions: {
+  state: {
+    title: 'AOI VIDEO',
+  },
+  mutations: {},
+  getters: {},
+  actions: {},
+};
 
-    }
-}
-
-export default common
+export default common;

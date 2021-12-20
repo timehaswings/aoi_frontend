@@ -2,16 +2,36 @@
   <div class="login center">
     <div class="login-wrapper">
       <div class="form-title center">用户登录</div>
-      <el-form ref="loginForm" :rules="formRules" hide-required-asterisk :model="formData" label-width="50px" @submit.prevent>
+      <el-form
+        ref="loginForm"
+        :rules="formRules"
+        hide-required-asterisk
+        :model="formData"
+        label-width="50px"
+        @submit.prevent
+      >
         <el-form-item label="账 户" prop="username">
-          <el-input v-model="formData.username" @keyup.enter="doLogin" placeholder="请输入账户" status-icon size="small">
+          <el-input
+            v-model="formData.username"
+            @keyup.enter="doLogin"
+            placeholder="请输入账户"
+            status-icon
+            size="small"
+          >
             <template #prefix>
               <el-icon class="el-input__icon"><user /></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="密 码" prop="password">
-          <el-input v-model="formData.password" @keyup.enter="doLogin" placeholder="请输入密码" show-password status-icon size="small">
+          <el-input
+            v-model="formData.password"
+            @keyup.enter="doLogin"
+            placeholder="请输入密码"
+            show-password
+            status-icon
+            size="small"
+          >
             <template #prefix>
               <el-icon class="el-input__icon"><lock /></el-icon>
             </template>
@@ -80,12 +100,12 @@ export default {
       router.push('/register');
     };
     const doLogin = () => {
-      loginForm.value.validate((valid) => {
+      loginForm.value.validate(valid => {
         if (valid) {
           loading.value = true;
           proxy.$api.auth
             .login(formData)
-            .then((res) => {
+            .then(res => {
               loading.value = false;
               store.commit('SET_TOKEN', res.token);
               store.commit('SET_USER', res.user);

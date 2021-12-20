@@ -1,10 +1,10 @@
 <template>
   <div class="details">
     <el-row>
-      <el-col> <el-page-header content="视频播放" /></el-col>
+      <el-col><el-page-header content="视频播放" /></el-col>
     </el-row>
     <el-row class="mbt15">
-      <el-col> <aoi-player :src="video.src"></aoi-player></el-col>
+      <el-col><aoi-player :src="video.src"></aoi-player></el-col>
     </el-row>
     <el-row>
       <el-col>

@@ -2,7 +2,14 @@
   <div class="login center">
     <div class="login-wrapper">
       <div class="form-title center">用户注册</div>
-      <el-form ref="registerForm" :model="formData" :rules="formRules" hide-required-asterisk size="small" label-width="80px">
+      <el-form
+        ref="registerForm"
+        :model="formData"
+        :rules="formRules"
+        hide-required-asterisk
+        size="small"
+        label-width="80px"
+      >
         <el-form-item label="账 户" prop="username">
           <el-input v-model="formData.username" placeholder="请输入邮箱/手机" status-icon size="small">
             <template #prefix>
@@ -18,15 +25,25 @@
           </el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input v-model="formData.confirmPassword" placeholder="请再次输入密码" show-password status-icon size="small">
+          <el-input
+            v-model="formData.confirmPassword"
+            placeholder="请再次输入密码"
+            show-password
+            status-icon
+            size="small"
+          >
             <template #prefix>
               <el-icon class="el-input__icon"><lock /></el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="captchaValue">
-          <el-col :span="12"> <el-image class="captcha-img" @click="getCaptcha" :src="captchaSrc" fit="contain"></el-image> </el-col>
-          <el-col :span="12"> <el-input v-model="formData.captchaValue" placeholder="输入验证码" size="small" style="margin-left: 15px" /> </el-col>
+          <el-col :span="12">
+            <el-image class="captcha-img" @click="getCaptcha" :src="captchaSrc" fit="contain"></el-image>
+          </el-col>
+          <el-col :span="12">
+            <el-input v-model="formData.captchaValue" placeholder="输入验证码" size="small" style="margin-left: 15px" />
+          </el-col>
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" @click="doRegister" size="small">注 册</el-button>
@@ -115,12 +132,12 @@ export default {
         });
         return;
       }
-      registerForm.value.validate((valid) => {
+      registerForm.value.validate(valid => {
         if (valid) {
           loading.value = true;
           proxy.$api.auth
             .register(formData.value)
-            .then((res) => {
+            .then(res => {
               loading.value = false;
               if (res.success) {
                 proxy.$notify.success({
@@ -137,7 +154,7 @@ export default {
                 });
               }
             })
-            .catch((err) => {
+            .catch(err => {
               loading.value = false;
               proxy.$notify.error({
                 title: '错误',
@@ -153,14 +170,14 @@ export default {
       loading.value = true;
       proxy.$api.auth
         .captcha()
-        .then((res) => {
+        .then(res => {
           const u8s = new Uint8Array(res.captchaImage);
           const fu8 = Base64.fromUint8Array(u8s);
           captchaSrc.value = 'data:image/png;base64, ' + Base64.decode(fu8);
           formData.value.captchaKey = res.captchaKey;
           loading.value = false;
         })
-        .catch((err) => {
+        .catch(err => {
           loading.value = false;
           proxy.$notify.warning({
             title: '错误',

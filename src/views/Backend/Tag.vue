@@ -45,12 +45,20 @@ export default {
         },
       ],
       editFormItems: [
-        { field: 'name', span: 24, title: '名称', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+        {
+          field: 'name',
+          span: 24,
+          title: '名称',
+          itemRender: { name: '$input', props: { placeholder: '请输入名称' } },
+        },
         {
           field: 'desc',
           span: 24,
           title: '描述',
-          itemRender: { name: '$textarea', props: { placeholder: '请输入描述', resize: 'vertical', autosize: { minRows: 4, maxRows: 4 } } },
+          itemRender: {
+            name: '$textarea',
+            props: { placeholder: '请输入描述', resize: 'vertical', autosize: { minRows: 4, maxRows: 4 } },
+          },
         },
         {
           field: 'sort',
@@ -81,7 +89,7 @@ export default {
         const query = { ...params, sort: '-sort,-id' };
         return proxy.$api.tag
           .get(query)
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               state.data = res.data.rows;
               state.total = res.data.total;
@@ -92,7 +100,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '获取标签失败：' + err.msg,
@@ -102,7 +110,7 @@ export default {
       add(data) {
         return proxy.$api.tag
           .add(data)
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
@@ -115,7 +123,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '添加标签失败：' + err.msg,
@@ -125,7 +133,7 @@ export default {
       update(data) {
         return proxy.$api.tag
           .update(data)
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
@@ -138,7 +146,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '修改标签失败：' + err.msg,
@@ -148,7 +156,7 @@ export default {
       del(data) {
         return proxy.$api.tag
           .del({ id: data.id })
-          .then((res) => {
+          .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
@@ -161,7 +169,7 @@ export default {
               });
             }
           })
-          .catch((err) => {
+          .catch(err => {
             proxy.$notify.error({
               title: '错误',
               message: '删除标签失败：' + err.msg,

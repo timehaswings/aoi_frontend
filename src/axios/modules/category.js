@@ -4,7 +4,7 @@ import request from '../axios';
  * 添加类别
  * @param {*} data
  */
-export const add = (data) =>
+export const add = data =>
   request({
     url: '/api/v1/category',
     method: 'post',
@@ -15,7 +15,7 @@ export const add = (data) =>
  * 查询类别
  * @param {*} params
  */
-export const get = (params) =>
+export const get = params =>
   request({
     url: '/api/v1/category',
     method: 'get',
@@ -26,7 +26,7 @@ export const get = (params) =>
  * 修改类别
  * @param {*} data
  */
-export const update = (data) =>
+export const update = data =>
   request({
     url: '/api/v1/category',
     method: 'put',
@@ -37,7 +37,7 @@ export const update = (data) =>
  * 修改类别
  * @param {*} params
  */
-export const del = (params) =>
+export const del = params =>
   request({
     url: '/api/v1/category',
     method: 'delete',

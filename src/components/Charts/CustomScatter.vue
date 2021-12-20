@@ -43,7 +43,7 @@ export default {
       },
     },
   },
-  setup: (props) => {
+  setup: props => {
     const option = reactive({
       title: {
         text: props.title,

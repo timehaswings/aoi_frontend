@@ -12,16 +12,16 @@ const common = {
     },
   },
   getters: {
-    isLogin: (state) => {
+    isLogin: state => {
       return state.token ? true : false;
     },
-    username: (state) => {
+    username: state => {
       return state.user ? state.user.username : undefined;
     },
-    email: (state) => {
+    email: state => {
       return state.user ? state.user.email : undefined;
     },
-    isSuperuser: (state) => {
+    isSuperuser: state => {
       return state.user ? state.user.isSuperuser : false;
     },
   },

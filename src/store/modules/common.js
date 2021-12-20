@@ -4,13 +4,13 @@ const common = {
     isCollapse: false,
   },
   mutations: {
-    COLLAPSE: (state) => {
+    COLLAPSE: state => {
       state.isCollapse = true;
     },
-    OPEN: (state) => {
+    OPEN: state => {
       state.isCollapse = false;
     },
-    TOGGLE: (state) => {
+    TOGGLE: state => {
       state.isCollapse = !state.isCollapse;
     },
     SET_NOTIFY: (state, notifyMsg) => {

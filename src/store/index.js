@@ -25,9 +25,9 @@ const store = createStore({
     createPersistedState({
       key: secret,
       storage: {
-        getItem: (key) => ls.get(key),
+        getItem: key => ls.get(key),
         setItem: (key, value) => ls.set(key, value),
-        removeItem: (key) => ls.remove(key),
+        removeItem: key => ls.remove(key),
       },
     }),
   ],

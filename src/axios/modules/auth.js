@@ -4,7 +4,7 @@ import request from '../axios';
  * 登录
  * @param {*} data
  */
-export const login = (data) =>
+export const login = data =>
   request({
     url: '/api/v1/token/auth',
     method: 'post',
@@ -15,7 +15,7 @@ export const login = (data) =>
  * 刷新令牌
  * @param {*} data
  */
-export const refresh = (data) =>
+export const refresh = data =>
   request({
     url: '/api/v1/token/refresh',
     method: 'post',
@@ -26,7 +26,7 @@ export const refresh = (data) =>
  * 验证令牌
  * @param {*} data
  */
-export const verify = (data) =>
+export const verify = data =>
   request({
     url: '/api/v1/token/verify',
     method: 'post',
@@ -37,7 +37,7 @@ export const verify = (data) =>
  * 获取验证码
  * @param {*} data
  */
-export const captcha = (data) =>
+export const captcha = data =>
   request({
     url: '/api/v1/captcha',
     method: 'post',
@@ -48,7 +48,7 @@ export const captcha = (data) =>
  * 用户注册
  * @param {*} data
  */
-export const register = (data) =>
+export const register = data =>
   request({
     url: '/api/v1/register',
     method: 'post',

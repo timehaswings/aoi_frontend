@@ -4,7 +4,10 @@
       <el-carousel-item v-for="item in carouselConfig.data" :key="item">
         <el-image :src="item.url">
           <template #placeholder>
-            <div class="image-slot">Loading<span class="dot">...</span></div>
+            <div class="image-slot">
+              Loading
+              <span class="dot">...</span>
+            </div>
           </template>
         </el-image>
       </el-carousel-item>
@@ -20,7 +23,10 @@
           <el-card :body-style="{ padding: '0px' }">
             <el-image :src="col.avator" class="image">
               <template #placeholder>
-                <div class="image-slot">Loading<span class="dot">...</span></div>
+                <div class="image-slot">
+                  Loading
+                  <span class="dot">...</span>
+                </div>
               </template>
               <template #error>
                 <div class="image-slot">
@@ -64,7 +70,7 @@ export default {
         { name: '九九', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
       ],
     });
-    const rows = (videos) => {
+    const rows = videos => {
       return Math.ceil(videos.length / carouselConfig.colNumber);
     };
     const videoRange = (videos, index) => {

@@ -5,6 +5,6 @@ const config = {
   lang: 'zh-CN',
 };
 
-export default (app) => {
+export default app => {
   app.use(Vue3VideoPlayer, config);
 };

@@ -3,17 +3,48 @@
     <div class="logo-wrapper">
       <el-avatar :size="36" :src="logo" fit="cover"></el-avatar>
     </div>
-    <el-menu :default-active="active" mode="horizontal" background-color="transparent" active-text-color="#757575" :ellipsis="false" router>
-      <el-menu-item index="/"><component :is="icons['home-filled']" class="icon"></component> 主页</el-menu-item>
-      <el-menu-item index="/category"><component :is="icons['grid']" class="icon"></component> 分类</el-menu-item>
-      <el-menu-item index="/member"><component :is="icons['briefcase']" class="icon"></component> 会员</el-menu-item>
-      <el-menu-item index="/about"><component :is="icons['help-filled']" class="icon"></component> 关于</el-menu-item>
-      <el-menu-item v-if="!isLogin" index="/login"><component :is="icons['user']" class="icon"></component> 登录</el-menu-item>
+    <el-menu
+      :default-active="active"
+      mode="horizontal"
+      background-color="transparent"
+      active-text-color="#757575"
+      :ellipsis="false"
+      router
+    >
+      <el-menu-item index="/">
+        <component :is="icons['home-filled']" class="icon"></component>
+        主页
+      </el-menu-item>
+      <el-menu-item index="/category">
+        <component :is="icons['grid']" class="icon"></component>
+        分类
+      </el-menu-item>
+      <el-menu-item index="/member">
+        <component :is="icons['briefcase']" class="icon"></component>
+        会员
+      </el-menu-item>
+      <el-menu-item index="/about">
+        <component :is="icons['help-filled']" class="icon"></component>
+        关于
+      </el-menu-item>
+      <el-menu-item v-if="!isLogin" index="/login">
+        <component :is="icons['user']" class="icon"></component>
+        登录
+      </el-menu-item>
       <el-sub-menu v-else index="#">
         <template #title>{{ timeState() }}{{ username }}</template>
-        <el-menu-item index="/personal"><component :is="icons['user']" class="icon"></component> 个人中心</el-menu-item>
-        <el-menu-item index="#" @click="goBackend"><component :is="icons['box']" class="icon"></component> 后台管理</el-menu-item>
-        <el-menu-item index="#" @click="logout"><component :is="icons['position']" class="icon"></component> 退出登录</el-menu-item>
+        <el-menu-item index="/personal">
+          <component :is="icons['user']" class="icon"></component>
+          个人中心
+        </el-menu-item>
+        <el-menu-item index="#" @click="goBackend">
+          <component :is="icons['box']" class="icon"></component>
+          后台管理
+        </el-menu-item>
+        <el-menu-item index="#" @click="logout">
+          <component :is="icons['position']" class="icon"></component>
+          退出登录
+        </el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>

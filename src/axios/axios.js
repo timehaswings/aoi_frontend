@@ -15,7 +15,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
 // request 拦截器
 axios.interceptors.request.use(
-  (config) => {
+  config => {
     const token = store.state.auth.token;
     // 2. 带上token
     if (token) {
@@ -23,7 +23,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  error => {
     // 请求错误时
     // 1. 判断请求超时
     if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
@@ -46,7 +46,7 @@ axios.interceptors.request.use(
 
 // response 拦截器
 axios.interceptors.response.use(
-  (response) => {
+  response => {
     let data;
     // IE9时response.data是undefined，因此需要使用response.request.responseText(Stringify后的字符串)
     if (response.data == undefined && response.request && response.request.responseText) {
@@ -61,7 +61,7 @@ axios.interceptors.response.use(
       return data;
     }
   },
-  (err) => {
+  err => {
     if (err && err.response) {
       switch (err.response.status) {
         case 400:
@@ -110,17 +110,17 @@ axios.interceptors.response.use(
   }
 );
 
-const request = (options) => {
+const request = options => {
   // 请求处理
   options.url = toRestUrl(options.url, options.params ? options.params : options.data);
   // get请求加上时间戳
   return new Promise((resolve, reject) => {
     axios
       .request(options)
-      .then((res) => {
+      .then(res => {
         resolve(res);
       })
-      .catch((error) => {
+      .catch(error => {
         reject(error);
         if (error && error.response) {
           if ([400, 401, 403].includes(error.response.status)) {
@@ -158,12 +158,12 @@ const toRestUrl = (url, params) => {
   if (paramArr && paramArr.length) {
     if (Object.prototype.toString.call(params) === '[object FormData]') {
       // formData数据
-      paramArr.forEach((el) => {
+      paramArr.forEach(el => {
         let key = el.substring(1, el.length - 1); // 去掉左右 { } 边界符
         url = url.replace(el, params.get(key));
       });
     } else {
-      paramArr.forEach((el) => {
+      paramArr.forEach(el => {
         let key = el.substring(1, el.length - 1);
         url = url.replace(el, params[key]);
       });
