@@ -9,7 +9,7 @@ import auth from './directives/auth';
 import masonryPlus from './plugins/masonry';
 import 'xe-utils';
 import VXETable from 'vxe-table';
-import 'default-passive-events';
+// import 'default-passive-events';
 import 'vxe-table/lib/style.css';
 import 'normalize.css/normalize.css';
 import 'animate.css';

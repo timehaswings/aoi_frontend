@@ -1,5 +1,6 @@
 <template>
   <base-table
+    ref="baseTable"
     :columns="state.columns"
     :data="state.data"
     :total="state.total"
@@ -15,31 +16,46 @@
       <el-tag v-if="row.isActive" size="mini" type="success" effect="dark">已激活</el-tag>
       <el-tag v-else size="mini" type="danger" effect="dark">未激活</el-tag>
     </template>
-    <template #modal_form="{ data, modalVisible }">
-      <el-form ref="editForm" :model="data" label-width="80px">
+    <template #modal_form="{ data }">
+      <el-form ref="editForm" size="mini" :model="data" label-width="80px">
         <el-form-item label="名称">
-          <el-input v-model="data.name"></el-input>
+          <el-input v-model="data.name" placeholder="请输入名称"></el-input>
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model="data.desc"></el-input>
+          <el-input v-model="data.desc" placeholder="请输入描述"></el-input>
         </el-form-item>
         <el-form-item label="演员">
-          <el-input v-model="data.artists"></el-input>
+          <el-input v-model="data.artists" placeholder="请输入演员"></el-input>
+        </el-form-item>
+        <el-form-item label="所属分类">
+          <el-select v-model="data.category" placeholder="请选择分类" style="width: 150px">
+            <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="标签">
+          <el-select v-model="data.tags" multiple placeholder="请选择标签" style="width: 300px">
+            <el-option v-for="item in tagList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="上映时间">
-          <el-input v-model="data.releaseTime"></el-input>
+          <el-date-picker
+            v-model="data.releaseTime"
+            :default-value="new Date()"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+            type="date"
+            placeholder="请选择上映时间"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="视频">
-          <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">
-              Drop file here or
-              <em>click to upload</em>
-            </div>
-            <template #tip>
-              <div class="el-upload__tip">jpg/png files with a size less than 500kb</div>
-            </template>
-          </el-upload>
+          <upload-video v-model="videos"></upload-video>
+        </el-form-item>
+        <el-form-item>
+          <div class="right-wrapper">
+            <el-button v-if="data.id" type="primary" @click="state.update(data)">修改</el-button>
+            <el-button v-else type="primary" @click="state.add(data)">新增</el-button>
+            <el-button @click="cancel">取消</el-button>
+          </div>
         </el-form-item>
       </el-form>
     </template>
@@ -47,18 +63,25 @@
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue';
-import { UploadFilled } from '@element-plus/icons';
+import { ref, reactive, getCurrentInstance, onMounted } from 'vue';
 import BaseTable from '@/components/Backend/BaseTable/Index.vue';
+import UploadVideo from '@/components/Upload/UploadVideo.vue';
 
 export default {
-  components: { BaseTable, UploadFilled },
+  components: { BaseTable, UploadVideo },
   setup() {
     const { proxy } = getCurrentInstance();
     const activeList = [
       { label: '已激活', value: true },
       { label: '未激活', value: false },
     ];
+    const categoryList = ref([]);
+    const tagList = ref([]);
+    const videos = ref([]);
+    const baseTable = ref([]);
+    const cancel = () => {
+      baseTable.value.hideModal();
+    };
     const state = reactive({
       queryFormItems: [
         {
@@ -86,9 +109,8 @@ export default {
       data: [],
       total: 0,
       query(params) {
-        const query = { ...params, sort: '-sort,-id' };
         return proxy.$api.video
-          .get(query)
+          .get(params)
           .then(res => {
             if (res.success) {
               state.data = res.data.rows;
@@ -96,37 +118,48 @@ export default {
             } else {
               proxy.$notify.warning({
                 title: '失败',
-                message: '获取类别失败：' + res.msg,
+                message: '获取视频失败：' + res.msg,
               });
             }
           })
           .catch(err => {
             proxy.$notify.error({
               title: '错误',
-              message: '获取类别失败：' + err.msg,
+              message: '获取视频失败：' + err.msg,
             });
           });
       },
       add(data) {
+        if (!videos.value.length) {
+          return proxy.$notify.warning({
+            title: '失败',
+            message: '必须上传视频',
+          });
+        }
+        const params = {
+          ...data,
+          m3u8Path: videos.value[0].response.data[0],
+          thumbPath: videos.value[0].response.data[0],
+        };
         return proxy.$api.video
-          .add(data)
+          .add(params)
           .then(res => {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
-                message: '添加类别成功',
+                message: '添加视频成功',
               });
             } else {
               proxy.$notify.warning({
                 title: '失败',
-                message: '添加类别失败：' + res.msg,
+                message: '添加视频失败：' + res.msg,
               });
             }
           })
           .catch(err => {
             proxy.$notify.error({
               title: '错误',
-              message: '添加类别失败：' + err.msg,
+              message: '添加视频失败：' + err.msg,
             });
           });
       },
@@ -137,19 +170,19 @@ export default {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
-                message: '修改类别成功',
+                message: '修改视频成功',
               });
             } else {
               proxy.$notify.warning({
                 title: '失败',
-                message: '修改类别失败：' + res.msg,
+                message: '修改视频失败：' + res.msg,
               });
             }
           })
           .catch(err => {
             proxy.$notify.error({
               title: '错误',
-              message: '修改类别失败：' + err.msg,
+              message: '修改视频失败：' + err.msg,
             });
           });
       },
@@ -160,26 +193,77 @@ export default {
             if (res.success) {
               proxy.$notify.success({
                 title: '成功',
-                message: '删除类别成功',
+                message: '删除视频成功',
               });
             } else {
               proxy.$notify.warning({
                 title: '失败',
-                message: '删除类别失败：' + res.msg,
+                message: '删除视频失败：' + res.msg,
               });
             }
           })
           .catch(err => {
             proxy.$notify.error({
               title: '错误',
-              message: '删除类别失败：' + err.msg,
+              message: '删除视频失败：' + err.msg,
             });
           });
       },
     });
+    const getCategory = () => {
+      proxy.$api.category
+        .get({ isActivate: true })
+        .then(res => {
+          if (res.success) {
+            categoryList.value = res.data.rows;
+          } else {
+            proxy.$notify.warning({
+              title: '失败',
+              message: '获取类别失败：' + res.msg,
+            });
+          }
+        })
+        .catch(err => {
+          proxy.$notify.error({
+            title: '错误',
+            message: '获取类别失败：' + err.msg,
+          });
+        });
+    };
+    const getTags = () => {
+      proxy.$api.tag
+        .get({ isActivate: true })
+        .then(res => {
+          if (res.success) {
+            tagList.value = res.data.rows;
+          } else {
+            proxy.$notify.warning({
+              title: '失败',
+              message: '删除标签失败：' + res.msg,
+            });
+          }
+        })
+        .catch(err => {
+          proxy.$notify.error({
+            title: '错误',
+            message: '删除标签失败：' + err.msg,
+          });
+        });
+    };
+    onMounted(() => {
+      getCategory();
+      getTags();
+    });
     return {
       state,
+      videos,
+      baseTable,
+      cancel,
+      categoryList,
+      tagList,
     };
   },
 };
 </script>
+
+<style scoped></style>
