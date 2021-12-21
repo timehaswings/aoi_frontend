@@ -2,6 +2,7 @@
   <div class="left-right-wrapper">
     <div class="logo-wrapper">
       <el-avatar :size="36" :src="logo" fit="cover"></el-avatar>
+      <span class="title">{{ $t('app.title') }}</span>
     </div>
     <el-menu
       :default-active="active"
@@ -128,6 +129,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.title {
+  font-size: 20px;
+  margin-left: 10px;
 }
 
 .el-avatar {

@@ -112,6 +112,14 @@ const routes = [
         },
         component: () => import('../views/Backend/Video.vue'),
       },
+      {
+        path: 'menu',
+        name: 'BackendMenu',
+        meta: {
+          title: 'BackendMenu',
+        },
+        component: () => import('../views/Backend/Menu.vue'),
+      },
     ],
   },
   {

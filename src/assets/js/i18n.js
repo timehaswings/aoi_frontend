@@ -1,5 +1,8 @@
 export default {
   'zh-cn': {
+    app: {
+      title: '太阳花',
+    },
     header: {
       backendTitle: '后台管理',
       welcome: '欢迎您，',
@@ -22,6 +25,9 @@ export default {
     },
   },
   en: {
+    app: {
+      title: 'Sun Flower',
+    },
     header: {
       backendTitle: 'Website Management',
       welcome: 'Welcome, ',
