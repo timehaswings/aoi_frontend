@@ -115,6 +115,13 @@ body {
   white-space: nowrap;
 }
 
+/** 居右布局 */
+.right-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 /** 横向导航布局 */
 .horizontal-nav ul {
   list-style: none;

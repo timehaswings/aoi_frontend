@@ -2,7 +2,7 @@
   "name": "aoi_frontend",
   "version": "0.0.0",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development vite",
+    "dev": "vite",
     "build:dev": "vite build --mode development",
     "build:staging": "vite build --mode staging",
     "build:prod": "vite build --mode production",
@@ -38,7 +38,6 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",
     "autoprefixer": "^10.4.0",
-    "cross-env": "^7.0.3",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -46,7 +45,6 @@
     "postcss-import": "^14.0.2",
     "prettier": "^2.4.1",
     "sass": "^1.43.2",
-    "vite": "^2.6.4",
-    "vite-plugin-mock": "^2.9.6"
+    "vite": "^2.6.4"
   }
 }

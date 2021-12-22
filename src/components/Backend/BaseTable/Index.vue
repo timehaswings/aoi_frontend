@@ -51,7 +51,7 @@
       </template>
     </vxe-grid>
     <vxe-modal v-model="modalVisible" :title="modalTitle" :width="modalWidth" esc-closable show-zoom resize>
-      <slot name="modal_form" :data="editFormData" :modalVisible="modalVisible">
+      <slot name="modal_form" :data="editFormData">
         <vxe-form
           :title-width="editFormTitleWidth"
           :rules="editFormRules"
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import 'default-passive-events';
 import { onMounted, computed, ref } from 'vue';
 import { VXETable } from 'vxe-table';
 
@@ -235,9 +236,11 @@ export default {
       modalVisible.value = true;
     };
     const showAddModal = () => {
+      const tmp = {};
       props.editFormItems.forEach(item => {
-        editFormData.value[item.field] = item.resetValue;
+        tmp[item.field] = item.resetValue;
       });
+      editFormData.value = { ...tmp };
       modalTitle.value = '新增';
       modalVisible.value = true;
     };
@@ -247,6 +250,9 @@ export default {
       } else if ('编辑' === modalTitle.value) {
         onUpdate(data);
       }
+    };
+    const hideModal = () => {
+      modalVisible.value = false;
     };
     onMounted(() => {
       onQuery();
@@ -290,6 +296,7 @@ export default {
       showAddModal,
       onSave,
       resetQuery,
+      hideModal,
     };
   },
 };
@@ -308,6 +315,10 @@ export default {
 
   .vxe-table--body-wrapper {
     background-color: v-bind(backgroundColor);
+  }
+
+  * {
+    touch-action: none;
   }
 }
 </style>
