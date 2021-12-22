@@ -1,9 +1,8 @@
 export default [
   {
-    url: 'http://localhost:8000/api/v1/token/auth',
+    url: '/api/v1/token/auth',
     method: 'POST',
     response: ({ body }) => {
-      console.log('---');
       return {
         success: true,
         msg: '登录成功',
@@ -17,7 +16,7 @@ export default [
           name: '周杰伦',
           phone: '',
           email: '',
-          menuList: menuList,
+          menuList: [],
         },
       };
     },

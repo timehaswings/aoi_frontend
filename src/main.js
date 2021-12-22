@@ -6,10 +6,10 @@ import api from './axios';
 import installElementPlus from './plugins/element';
 import videoPlayerPlus from './plugins/videoPlayer';
 import auth from './directives/auth';
+import mock from './mock';
 import masonryPlus from './plugins/masonry';
 import 'xe-utils';
 import VXETable from 'vxe-table';
-// import 'default-passive-events';
 import 'vxe-table/lib/style.css';
 import 'normalize.css/normalize.css';
 import 'animate.css';
@@ -22,6 +22,11 @@ app.config.globalProperties.$api = api;
 installElementPlus(app);
 videoPlayerPlus(app);
 masonryPlus(app);
+
+// 启用mock
+if (import.meta.env.MODE === 'development') {
+  mock.start();
+}
 
 // 加载指令
 auth(app);
