@@ -24,9 +24,9 @@ videoPlayerPlus(app);
 masonryPlus(app);
 
 // 启用mock
-if (import.meta.env.MODE === 'development') {
-  mock.start();
-}
+// if (import.meta.env.MODE === 'development') {
+//   mock.start();
+// }
 
 // 加载指令
 auth(app);
