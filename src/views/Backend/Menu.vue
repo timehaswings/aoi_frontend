@@ -14,10 +14,10 @@
             <template #default="{ node, data }">
               <div class="tree-node">
                 <span>{{ node.label }}</span>
-                <span>
-                  <el-button type="text" @click.stop="handleNodeClick(data)">查看</el-button>
-                  <el-button type="text" @click.stop="showAddModal(data)">添加</el-button>
-                  <el-button type="text" @click.stop="del(data.id)">删除</el-button>
+                <span class="node-operation">
+                  <el-button type="text" @click.stop="handleNodeClick(data)">查 看</el-button>
+                  <el-button type="text" @click.stop="showAddModal(data)">添 加</el-button>
+                  <el-button type="text" @click.stop="del(data.id)">删 除</el-button>
                 </span>
               </div>
             </template>
@@ -25,26 +25,31 @@
         </el-card>
       </el-col>
       <el-col :span="16">
-        <el-card class="menu-wrapper" shadow="never" :body-style="{ padding: '10px' }">
-          <el-descriptions v-if="menu !== null" :title="menu.name" :column="1" direction="vertical">
+        <el-card class="menu-wrapper" shadow="never" :body-style="{ padding: '10px 20px' }">
+          <el-descriptions v-if="menu !== null" :title="menu.name" :column="1" border>
             <template #extra>
-              <el-button type="primary" size="small">编辑</el-button>
-              <el-button type="primary" size="small" @click="menu = null">关闭</el-button>
+              <el-button class="hvr-radial-out" type="primary" size="small" @click="showEditModal(menu)">
+                编辑
+              </el-button>
+              <el-button class="hvr-radial-out" type="primary" size="small" @click="menu = null">关闭</el-button>
             </template>
             <el-descriptions-item label="ID">{{ menu.id }}</el-descriptions-item>
-            <el-descriptions-item label="地址">{{ menu.url }}</el-descriptions-item>
+            <el-descriptions-item label="URL">{{ menu.url }}</el-descriptions-item>
             <el-descriptions-item label="组件">{{ menu.component }}</el-descriptions-item>
             <el-descriptions-item label="图标">{{ menu.icon }}</el-descriptions-item>
             <el-descriptions-item label="类型">
-              <el-tag size="small">{{ menu.type }}</el-tag>
+              <el-tag size="small">{{ typeMapper[menu.type] }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="是否启用">
-              <el-tag size="small">{{ menu.isActive }}</el-tag>
+              <el-tag size="small" type="info">{{ activeMapper[menu.isActive] }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="排序">{{ menu.sort }}</el-descriptions-item>
             <el-descriptions-item label="创建人">{{ menu.createName }}</el-descriptions-item>
             <el-descriptions-item label="创建时间">{{ menu.createTime }}</el-descriptions-item>
           </el-descriptions>
+          <div v-else style="margin-top: 100px">
+            <el-empty description="点击右侧菜单树可查看详情"></el-empty>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -52,7 +57,7 @@
       v-model="modalOptions.modalVisible"
       :title="modalOptions.title"
       width="720"
-      height="360"
+      height="320"
       show-zoom
       resize
       transfer
@@ -120,6 +125,12 @@
                 content="添加"
                 @click="add(data)"
               ></vxe-button>
+              <vxe-button
+                v-show="modalOptions.operation === 'edit'"
+                status="primary"
+                content="修改"
+                @click="update(data)"
+              ></vxe-button>
               <vxe-button content="关闭" @click="modalOptions.modalVisible = false"></vxe-button>
             </template>
           </vxe-form-item>
@@ -146,19 +157,28 @@ export default {
     });
     const menu = ref(null);
     const tree = ref(null);
+    const typeMapper = {
+      catalogue: '目录',
+      router: '路由',
+    };
+    const activeMapper = {
+      true: '已激活',
+      false: '未激活',
+    };
     const modalOptions = reactive({
       title: '新增菜单',
       operation: 'add',
       modalVisible: false,
       nodeData: null,
     });
+    const defaultData = {
+      type: 'router',
+      isActive: 1,
+      sort: 100,
+    };
     const formOptions = reactive({
       loading: false,
-      data: {
-        type: 'router',
-        isActive: 1,
-        sort: 100,
-      },
+      data: defaultData,
       rules: {},
     });
     const showAddModal = data => {
@@ -166,6 +186,14 @@ export default {
       modalOptions.title = '新增菜单';
       modalOptions.operation = 'add';
       modalOptions.nodeData = data;
+      formOptions.data = defaultData;
+    };
+    const showEditModal = data => {
+      modalOptions.modalVisible = true;
+      modalOptions.title = '编辑菜单';
+      modalOptions.operation = 'edit';
+      modalOptions.nodeData = null;
+      formOptions.data = data;
     };
     const query = () => {
       proxy.$api.menu
@@ -174,17 +202,11 @@ export default {
           if (res.success) {
             treeOptions.data = res.data;
           } else {
-            proxy.$notify.warning({
-              title: '失败',
-              message: '获取标签失败：' + res.msg,
-            });
+            proxy.$tips.warning('获取菜单失败：' + res.msg);
           }
         })
         .catch(err => {
-          proxy.$notify.error({
-            title: '错误',
-            message: '获取标签失败：' + err.msg,
-          });
+          proxy.$tips.error('获取菜单失败：' + err.msg);
         });
     };
     const add = data => {
@@ -195,22 +217,32 @@ export default {
           if (res.success) {
             query();
             modalOptions.modalVisible = false;
-            proxy.$notify.warning({
-              title: '成功',
-              message: '添加菜单成功',
-            });
+            proxy.$tips.success(res.msg);
           } else {
-            proxy.$notify.warning({
-              title: '失败',
-              message: '获取标签失败：' + res.msg,
-            });
+            proxy.$tips.warning('添加菜单失败：' + res.msg);
           }
         })
         .catch(err => {
           proxy.$notify.error({
             title: '错误',
-            message: '获取标签失败：' + err.msg,
+            message: '获取菜单失败：' + err.msg,
           });
+        });
+    };
+    const update = data => {
+      proxy.$api.menu
+        .update(data)
+        .then(res => {
+          if (res.success) {
+            query();
+            modalOptions.modalVisible = false;
+            proxy.$tips.success(res.msg);
+          } else {
+            proxy.$tips.warning('修改菜单失败：' + res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error('修改菜单失败：' + err.msg);
         });
     };
     const del = id => {
@@ -219,22 +251,13 @@ export default {
         .then(res => {
           if (res.success) {
             query();
-            proxy.$notify.success({
-              title: '成功',
-              message: '删除菜单成功',
-            });
+            proxy.$tips.success(res.msg);
           } else {
-            proxy.$notify.warning({
-              title: '失败',
-              message: '获取标签失败：' + res.msg,
-            });
+            proxy.$tips.warning('删除菜单失败：' + res.msg);
           }
         })
         .catch(err => {
-          proxy.$notify.error({
-            title: '错误',
-            message: '获取标签失败：' + err.msg,
-          });
+          proxy.$tips.error('删除菜单失败：' + err.msg);
         });
     };
     const handleNodeClick = (data, node) => {
@@ -249,10 +272,14 @@ export default {
       tree,
       handleNodeClick,
       showAddModal,
+      showEditModal,
       add,
+      update,
       del,
       modalOptions,
       formOptions,
+      typeMapper,
+      activeMapper,
     };
   },
 };
@@ -260,7 +287,7 @@ export default {
 
 <style scoped>
 .menu-wrapper {
-  height: 100vh;
+  height: calc(100vh - 134px);
 }
 
 .tree-node {
@@ -272,5 +299,13 @@ export default {
   padding-right: 8px;
   height: 36px;
   line-height: 36px;
+}
+
+.tree-node:hover .node-operation {
+  visibility: visible;
+}
+
+.node-operation {
+  visibility: hidden;
 }
 </style>

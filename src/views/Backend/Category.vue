@@ -118,17 +118,11 @@ export default {
               state.data = res.data.rows;
               state.total = res.data.total;
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '获取类别失败：' + res.msg,
-              });
+              proxy.$tips.warning('获取类别失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '获取类别失败：' + err.msg,
-            });
+            proxy.$tips.error('获取类别失败：' + err.msg);
           });
       },
       add(data) {
@@ -136,22 +130,13 @@ export default {
           .add(data)
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '添加类别成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '添加类别失败：' + res.msg,
-              });
+              proxy.$tips.warning('添加类别失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '添加类别失败：' + err.msg,
-            });
+            proxy.$tips.error('添加类别失败：' + err.msg);
           });
       },
       update(data) {
@@ -159,22 +144,13 @@ export default {
           .update(data)
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '修改类别成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '修改类别失败：' + res.msg,
-              });
+              proxy.$tips.warning('修改类别失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '修改类别失败：' + err.msg,
-            });
+            proxy.$tips.error('修改类别失败：' + err.msg);
           });
       },
       del(data) {
@@ -182,22 +158,13 @@ export default {
           .del({ id: data.id })
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '删除类别成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '删除类别失败：' + res.msg,
-              });
+              proxy.$tips.warning('删除类别失败：' + res.msg);\
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '删除类别失败：' + err.msg,
-            });
+            proxy.$tips.error('删除类别失败：' + err.msg);
           });
       },
     });

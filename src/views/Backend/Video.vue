@@ -116,25 +116,16 @@ export default {
               state.data = res.data.rows;
               state.total = res.data.total;
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '获取视频失败：' + res.msg,
-              });
+              proxy.$tips.warning('获取视频失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '获取视频失败：' + err.msg,
-            });
+            proxy.$tips.error('获取视频失败：' + err.msg);
           });
       },
       add(data) {
         if (!videos.value.length) {
-          return proxy.$notify.warning({
-            title: '失败',
-            message: '必须上传视频',
-          });
+          return proxy.$tips.warning('必须上传视频');
         }
         const params = {
           ...data,
@@ -145,22 +136,13 @@ export default {
           .add(params)
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '添加视频成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '添加视频失败：' + res.msg,
-              });
+              proxy.$tips.warning('添加视频失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '添加视频失败：' + err.msg,
-            });
+            proxy.$tips.error('添加视频失败：' + err.msg);
           });
       },
       update(data) {
@@ -168,22 +150,13 @@ export default {
           .update(data)
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '修改视频成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '修改视频失败：' + res.msg,
-              });
+              proxy.$tips.warning('修改视频失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '修改视频失败：' + err.msg,
-            });
+            proxy.$tips.error('修改视频失败：' + err.msg);
           });
       },
       del(data) {
@@ -191,22 +164,13 @@ export default {
           .del({ id: data.id })
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '删除视频成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '删除视频失败：' + res.msg,
-              });
+              proxy.$tips.warning('删除视频失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '删除视频失败：' + err.msg,
-            });
+            proxy.$tips.error('删除视频失败：' + err.msg);
           });
       },
     });
@@ -217,17 +181,11 @@ export default {
           if (res.success) {
             categoryList.value = res.data.rows;
           } else {
-            proxy.$notify.warning({
-              title: '失败',
-              message: '获取类别失败：' + res.msg,
-            });
+            proxy.$tips.warning('获取类别失败：' + res.msg);
           }
         })
         .catch(err => {
-          proxy.$notify.error({
-            title: '错误',
-            message: '获取类别失败：' + err.msg,
-          });
+          proxy.$tips.error('获取类别失败：' + err.msg);
         });
     };
     const getTags = () => {
@@ -237,17 +195,11 @@ export default {
           if (res.success) {
             tagList.value = res.data.rows;
           } else {
-            proxy.$notify.warning({
-              title: '失败',
-              message: '删除标签失败：' + res.msg,
-            });
+            proxy.$tips.warning('获取标签失败：' + res.msg);
           }
         })
         .catch(err => {
-          proxy.$notify.error({
-            title: '错误',
-            message: '删除标签失败：' + err.msg,
-          });
+          proxy.$tips.error('获取标签失败：' + err.msg);
         });
     };
     onMounted(() => {

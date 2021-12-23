@@ -94,17 +94,11 @@ export default {
               state.data = res.data.rows;
               state.total = res.data.total;
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '获取标签失败：' + res.msg,
-              });
+              proxy.$tips.warning('获取标签失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '获取标签失败：' + err.msg,
-            });
+            proxy.$tips.error('获取标签失败：' + err.msg);
           });
       },
       add(data) {
@@ -112,22 +106,13 @@ export default {
           .add(data)
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '添加标签成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '添加标签失败：' + res.msg,
-              });
+              proxy.$tips.warning('添加标签失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '添加标签失败：' + err.msg,
-            });
+            proxy.$tips.error('添加标签失败：' + err.msg);
           });
       },
       update(data) {
@@ -135,22 +120,13 @@ export default {
           .update(data)
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '修改标签成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '修改标签失败：' + res.msg,
-              });
+              proxy.$tips.warning('修改标签失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '修改标签失败：' + err.msg,
-            });
+            proxy.$tips.error('修改标签失败：' + err.msg);
           });
       },
       del(data) {
@@ -158,22 +134,13 @@ export default {
           .del({ id: data.id })
           .then(res => {
             if (res.success) {
-              proxy.$notify.success({
-                title: '成功',
-                message: '删除标签成功',
-              });
+              proxy.$tips.success(res.msg);
             } else {
-              proxy.$notify.warning({
-                title: '失败',
-                message: '删除标签失败：' + res.msg,
-              });
+              proxy.$tips.warning('删除标签失败：' + res.msg);
             }
           })
           .catch(err => {
-            proxy.$notify.error({
-              title: '错误',
-              message: '删除标签失败：' + err.msg,
-            });
+            proxy.$tips.error('删除标签失败：' + err.msg);
           });
       },
     });

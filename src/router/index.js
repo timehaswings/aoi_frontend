@@ -120,6 +120,14 @@ const routes = [
         },
         component: () => import('../views/Backend/Menu.vue'),
       },
+      {
+        path: 'group',
+        name: 'BackendGroup',
+        meta: {
+          title: 'BackendGroup',
+        },
+        component: () => import('../views/Backend/Group.vue'),
+      },
     ],
   },
   {
