@@ -118,11 +118,11 @@ export default {
               state.data = res.data.rows;
               state.total = res.data.total;
             } else {
-              proxy.$tips.warning('获取类别失败：' + res.msg);
+              proxy.$tips.warning(res.msg);
             }
           })
           .catch(err => {
-            proxy.$tips.error('获取类别失败：' + err.msg);
+            proxy.$tips.error(err.msg);
           });
       },
       add(data) {
@@ -132,11 +132,11 @@ export default {
             if (res.success) {
               proxy.$tips.success(res.msg);
             } else {
-              proxy.$tips.warning('添加类别失败：' + res.msg);
+              proxy.$tips.warning(res.msg);
             }
           })
           .catch(err => {
-            proxy.$tips.error('添加类别失败：' + err.msg);
+            proxy.$tips.error(err.msg);
           });
       },
       update(data) {
@@ -146,11 +146,11 @@ export default {
             if (res.success) {
               proxy.$tips.success(res.msg);
             } else {
-              proxy.$tips.warning('修改类别失败：' + res.msg);
+              proxy.$tips.warning(res.msg);
             }
           })
           .catch(err => {
-            proxy.$tips.error('修改类别失败：' + err.msg);
+            proxy.$tips.error(err.msg);
           });
       },
       del(data) {
@@ -160,11 +160,11 @@ export default {
             if (res.success) {
               proxy.$tips.success(res.msg);
             } else {
-              proxy.$tips.warning('删除类别失败：' + res.msg);\
+              proxy.$tips.warning(res.msg);
             }
           })
           .catch(err => {
-            proxy.$tips.error('删除类别失败：' + err.msg);
+            proxy.$tips.error(err.msg);
           });
       },
     });

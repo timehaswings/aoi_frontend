@@ -128,6 +128,22 @@ const routes = [
         },
         component: () => import('../views/Backend/Group.vue'),
       },
+      {
+        path: 'config',
+        name: 'BackendConfig',
+        meta: {
+          title: 'BackendConfig',
+        },
+        component: () => import('../views/Backend/Config.vue'),
+      },
+      {
+        path: 'comment',
+        name: 'BackendComment',
+        meta: {
+          title: 'BackendComment',
+        },
+        component: () => import('../views/Backend/Comment.vue'),
+      },
     ],
   },
   {
