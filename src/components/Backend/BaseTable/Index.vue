@@ -30,15 +30,17 @@
         <vxe-button status="success" icon="vxe-icon--plus" @click="showAddModal">{{ $t('table.add') }}</vxe-button>
       </template>
       <template #operation="{ row }">
-        <vxe-button type="text" status="info" icon="el-icon-edit" @click="showEditModal(row)">
-          {{ $t('table.edit') }}
-        </vxe-button>
-        <vxe-button type="text" status="danger" icon="el-icon-delete" @click="onDel(row)">
-          {{ $t('table.del') }}
-        </vxe-button>
+        <slot name="table_operation" :row="row">
+          <vxe-button type="text" status="info" icon="el-icon-edit" @click="showEditModal(row)">
+            {{ $t('table.edit') }}
+          </vxe-button>
+          <vxe-button type="text" status="danger" icon="el-icon-delete" @click="onDel(row)">
+            {{ $t('table.del') }}
+          </vxe-button>
+        </slot>
       </template>
-      <template v-for="(index, name) in $slots" :key="index" #[name]="{ row }">
-        <slot v-if="!['modal_form'].includes(name)" :name="name" :row="row" />
+      <template v-for="(index, name) in $slots" #[name]="{ row }">
+        <slot v-if="!['modal_form', 'table_operation'].includes(name)" :name="name" :row="row" />
       </template>
       <template #pager>
         <vxe-pager
@@ -170,10 +172,10 @@ export default {
       data: formData,
       items: formItems,
     });
-    const editFormConfig = ref([
-      ...props.editFormItems,
-      { field: '', align: 'right', span: 24, slots: { default: 'modal_operation' } },
-    ]);
+    // const editFormConfig = ref([
+    //   ...props.editFormItems,
+    //   { field: '', align: 'right', span: 24, slots: { default: 'modal_operation' } },
+    // ]);
     const onQuery = async () => {
       if (props.queryFunction) {
         loading.value = true;
@@ -280,7 +282,22 @@ export default {
         return props.tableToolbar || defaultConfig;
       }),
       formConfig,
-      editFormConfig,
+      editFormConfig: computed(() => {
+        const newItems = props.editFormItems.map(item => {
+          const tmp = { visible: true };
+          if ('编辑' === modalTitle.value && typeof item.editVisible !== 'undefined' && item.editVisible !== null) {
+            tmp.visible = item.editVisible;
+          } else if (
+            '新增' === modalTitle.value &&
+            typeof item.addVisible !== 'undefined' &&
+            item.addVisible !== null
+          ) {
+            tmp.visible = item.addVisible;
+          }
+          return { ...tmp, ...item };
+        });
+        return newItems.concat({ field: '', align: 'right', span: 24, slots: { default: 'modal_operation' } });
+      }),
       editFormData,
       modalVisible,
       modalTitle,

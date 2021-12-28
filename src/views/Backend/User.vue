@@ -1,5 +1,6 @@
 <template>
   <base-table
+    ref="baseTable"
     :columns="state.columns"
     :data="state.data"
     :total="state.total"
@@ -15,11 +16,19 @@
       <el-tag v-if="row.isActive" size="mini" type="success" effect="dark">已激活</el-tag>
       <el-tag v-else size="mini" type="danger" effect="dark">未激活</el-tag>
     </template>
+    <template #table_operation="{ row }">
+      <vxe-button type="text" status="info" icon="el-icon-edit" @click="$refs.baseTable.showEditModal(row)">
+        {{ $t('table.edit') }}
+      </vxe-button>
+      <vxe-button type="text" status="danger" icon="el-icon-delete" @click="$refs.baseTable.onDel(row)">
+        {{ $t('table.del') }}
+      </vxe-button>
+    </template>
   </base-table>
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue';
+import { ref, reactive, getCurrentInstance } from 'vue';
 import BaseTable from '@/components/Backend/BaseTable/Index.vue';
 
 export default {
@@ -30,6 +39,7 @@ export default {
       { label: '已激活', value: true },
       { label: '未激活', value: false },
     ];
+    const baseTable = ref(null);
     const state = reactive({
       queryFormItems: [
         {
@@ -68,11 +78,21 @@ export default {
           itemRender: { name: '$input', props: { placeholder: '请输入邮箱' } },
         },
         {
+          field: 'password',
+          span: 24,
+          title: '密码',
+          editVisible: false,
+          addVisible: true,
+          itemRender: { name: '$input', props: { type: 'password', placeholder: '请输入密码' } },
+        },
+        {
           field: 'isActive',
           span: 24,
-          title: '激活状态',
+          title: '状态',
+          editVisible: true,
+          addVisible: false,
           resetValue: true,
-          itemRender: { name: '$select', options: activeList, props: { placeholder: '请选择激活状态' } },
+          itemRender: { name: '$select', options: activeList, props: { placeholder: '请选择状态' } },
         },
       ],
       columns: [
@@ -145,6 +165,7 @@ export default {
       },
     });
     return {
+      baseTable,
       state,
     };
   },
