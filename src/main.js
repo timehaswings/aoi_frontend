@@ -6,6 +6,7 @@ import api from './axios';
 import installElementPlus from './plugins/element';
 import videoPlayerPlus from './plugins/videoPlayer';
 import tips from './plugins/tips';
+import fontAwesome from './plugins/fontawesome';
 import auth from './directives/auth';
 // import mock from './mock';
 import masonryPlus from './plugins/masonry';
@@ -24,6 +25,7 @@ installElementPlus(app);
 videoPlayerPlus(app);
 masonryPlus(app);
 tips(app);
+fontAwesome(app);
 
 // 启用mock
 // if (import.meta.env.MODE === 'development') {

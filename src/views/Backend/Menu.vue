@@ -2,6 +2,9 @@
   <div class="backend-menu">
     <el-row :gutter="10">
       <el-col :span="8">
+        <div>
+          <!-- <fa-icon :icon="['fab', 'accessible-icon']"></fa-icon> -->
+        </div>
         <el-card class="menu-wrapper" shadow="never" :body-style="{ padding: '10px' }">
           <el-tree
             ref="tree"
@@ -64,8 +67,8 @@
     >
       <template #default>
         <vxe-form
-          title-colon
           ref="xForm"
+          title-colon
           title-align="right"
           title-width="80"
           :data="formOptions.data"
@@ -113,7 +116,7 @@
             </vxe-form-item>
             <vxe-form-item title="排序" field="sort" span="24">
               <template #default="{ data }">
-                <vxe-input type="number" v-model="data.sort" placeholder="请输入菜单排序"></vxe-input>
+                <vxe-input v-model="data.sort" type="number" placeholder="请输入菜单排序"></vxe-input>
               </template>
             </vxe-form-item>
           </vxe-form-gather>
