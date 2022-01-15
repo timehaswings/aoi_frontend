@@ -1,34 +1,48 @@
 <template>
-  <base-table
-    ref="baseTable"
-    :columns="state.columns"
-    :data="state.data"
-    :total="state.total"
-    :query-form-items="state.queryFormItems"
-    :edit-form-items="state.editFormItems"
-    edit-form-title-width="80"
-    :query-function="state.query"
-    :add-function="state.add"
-    :update-function="state.update"
-    :del-function="state.del"
-  >
-    <template #row_is_active="{ row }">
-      <el-tag v-if="row.isActive" size="mini" type="success" effect="dark">已激活</el-tag>
-      <el-tag v-else size="mini" type="danger" effect="dark">未激活</el-tag>
-    </template>
-    <template #table_operation="{ row }">
-      <vxe-button type="text" status="info" icon="el-icon-edit" @click="$refs.baseTable.showEditModal(row)">
-        {{ $t('table.edit') }}
-      </vxe-button>
-      <vxe-button type="text" status="danger" icon="el-icon-delete" @click="$refs.baseTable.onDel(row)">
-        {{ $t('table.del') }}
-      </vxe-button>
-    </template>
-  </base-table>
+  <div>
+    <base-table
+      ref="baseTable"
+      :columns="state.columns"
+      :data="state.data"
+      :total="state.total"
+      :query-form-items="state.queryFormItems"
+      :edit-form-items="state.editFormItems"
+      edit-form-title-width="80"
+      :query-function="state.query"
+      :add-function="state.add"
+      :update-function="state.update"
+      :del-function="state.del"
+    >
+      <template #row_is_active="{ row }">
+        <el-tag v-if="row.isActive" size="mini" type="success" effect="dark">已激活</el-tag>
+        <el-tag v-else size="mini" type="danger" effect="dark">未激活</el-tag>
+      </template>
+      <template #table_operation="{ row }">
+        <vxe-button type="text" status="wraning" icon="el-icon-edit" @click="showGroupModal(row.id)">用户组</vxe-button>
+        <vxe-button type="text" status="info" icon="el-icon-edit" @click="$refs.baseTable.showEditModal(row)">
+          {{ $t('table.edit') }}
+        </vxe-button>
+        <vxe-button type="text" status="danger" icon="el-icon-delete" @click="$refs.baseTable.onDel(row)">
+          {{ $t('table.del') }}
+        </vxe-button>
+      </template>
+    </base-table>
+    <vxe-modal v-model="groupModal" show-zoom resize transfer>
+      <template #default>
+        <el-select v-model="userGroups" multiple placeholder="Select" style="width: 100%">
+          <el-option v-for="item in groups" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>
+        <div class="right-wrapper" style="margin-top: 10px">
+          <vxe-button status="primary">保存</vxe-button>
+          <vxe-button @click="groupModal = false">取消</vxe-button>
+        </div>
+      </template>
+    </vxe-modal>
+  </div>
 </template>
 
 <script>
-import { ref, reactive, getCurrentInstance } from 'vue';
+import { ref, reactive, onMounted, getCurrentInstance } from 'vue';
 import BaseTable from '@/components/Backend/BaseTable/Index.vue';
 
 export default {
@@ -39,7 +53,44 @@ export default {
       { label: '已激活', value: true },
       { label: '未激活', value: false },
     ];
+    const groups = ref([]);
+    const userGroups = ref([]);
     const baseTable = ref(null);
+    const groupModal = ref(false);
+    const showGroupModal = id => {
+      groupModal.value = true;
+      userGroups.value = [];
+      proxy.$api.user
+        .group({ userId: id })
+        .then(res => {
+          if (res.success) {
+            console.log(res);
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
+    const getGroup = () => {
+      proxy.$api.group
+        .get()
+        .then(res => {
+          if (res.success) {
+            groups.value = res.data.rows;
+            console.log(groups.value);
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
+    onMounted(() => {
+      getGroup();
+    });
     const state = reactive({
       queryFormItems: [
         {
@@ -166,6 +217,10 @@ export default {
     });
     return {
       baseTable,
+      groupModal,
+      userGroups,
+      groups,
+      showGroupModal,
       state,
     };
   },

@@ -43,3 +43,14 @@ export const del = params =>
     method: 'delete',
     params,
   });
+
+/**
+ * 获取用户组
+ * @param {*} params
+ */
+export const group = params =>
+  request({
+    url: '/api/v1/user/group',
+    method: 'get',
+    params,
+  });
