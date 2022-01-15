@@ -1,8 +1,7 @@
 <template>
   <div class="backend-menu">
-    <el-row :gutter="10">
+    <el-row v-loading="menuLoading" :gutter="10">
       <el-col :span="8">
-        <div></div>
         <el-card class="menu-wrapper" shadow="never" :body-style="{ padding: '10px' }">
           <el-tree
             ref="tree"
@@ -45,6 +44,9 @@
             <el-descriptions-item label="图标">{{ menu.icon }}</el-descriptions-item>
             <el-descriptions-item label="类型">
               <el-tag size="small">{{ typeMapper[menu.type] }}</el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="需要登录">
+              <el-tag size="small" type="warning">{{ menu.requireLogin ? '是' : '否' }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="是否启用">
               <el-tag size="small" type="info">{{ activeMapper[menu.isActive] }}</el-tag>
@@ -112,8 +114,16 @@
             <vxe-form-item title="激活" field="isActive" span="24">
               <template #default="{ data }">
                 <vxe-select v-model="data.isActive" placeholder="请选择是否激活">
-                  <vxe-option :value="1" label="是"></vxe-option>
-                  <vxe-option :value="0" label="否"></vxe-option>
+                  <vxe-option :value="true" label="是"></vxe-option>
+                  <vxe-option :value="false" label="否"></vxe-option>
+                </vxe-select>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item title="登录" field="requireLogin" span="24">
+              <template #default="{ data }">
+                <vxe-select v-model="data.requireLogin" placeholder="请选择是否需要登录">
+                  <vxe-option :value="true" label="是"></vxe-option>
+                  <vxe-option :value="false" label="否"></vxe-option>
                 </vxe-select>
               </template>
             </vxe-form-item>
@@ -161,6 +171,7 @@ export default {
         value: 'id',
       },
     });
+    const menuLoading = ref(false);
     const menu = ref(null);
     const tree = ref(null);
     const typeMapper = {
@@ -179,12 +190,13 @@ export default {
     });
     const defaultData = {
       type: 'router',
-      isActive: 1,
+      isActive: true,
+      requireLogin: false,
       sort: 100,
     };
     const formOptions = reactive({
       loading: false,
-      data: defaultData,
+      data: { ...defaultData },
       rules: {},
     });
     const showAddModal = data => {
@@ -192,7 +204,7 @@ export default {
       modalOptions.title = '新增菜单';
       modalOptions.operation = 'add';
       modalOptions.nodeData = data;
-      formOptions.data = defaultData;
+      formOptions.data = { ...defaultData };
     };
     const showEditModal = data => {
       modalOptions.modalVisible = true;
@@ -202,9 +214,11 @@ export default {
       formOptions.data = data;
     };
     const query = () => {
+      menuLoading.value = true;
       proxy.$api.menu
         .get()
         .then(res => {
+          menuLoading.value = false;
           if (res.success) {
             treeOptions.data = res.data;
           } else {
@@ -212,19 +226,23 @@ export default {
           }
         })
         .catch(err => {
+          menuLoading.value = false;
           proxy.$tips.error('获取菜单失败：' + err.msg);
         });
     };
     const add = data => {
       data.parentId = modalOptions.nodeData.id;
+      // menuLoading.value = true;
       proxy.$api.menu
         .add(data)
         .then(res => {
+          // menuLoading.value = false;
           if (res.success) {
             query();
             modalOptions.modalVisible = false;
             proxy.$tips.success(res.msg);
           } else {
+            // menuLoading.value = false;
             proxy.$tips.warning('添加菜单失败：' + res.msg);
           }
         })
@@ -236,9 +254,11 @@ export default {
         });
     };
     const update = data => {
+      menuLoading.value = true;
       proxy.$api.menu
         .update(data)
         .then(res => {
+          menuLoading.value = false;
           if (res.success) {
             query();
             modalOptions.modalVisible = false;
@@ -248,13 +268,16 @@ export default {
           }
         })
         .catch(err => {
+          menuLoading.value = false;
           proxy.$tips.error('修改菜单失败：' + err.msg);
         });
     };
     const del = id => {
+      menuLoading.value = true;
       proxy.$api.menu
         .del({ id })
         .then(res => {
+          menuLoading.value = false;
           if (res.success) {
             query();
             proxy.$tips.success(res.msg);
@@ -263,6 +286,7 @@ export default {
           }
         })
         .catch(err => {
+          menuLoading.value = false;
           proxy.$tips.error('删除菜单失败：' + err.msg);
         });
     };
@@ -274,6 +298,7 @@ export default {
     });
     return {
       treeOptions,
+      menuLoading,
       menu,
       tree,
       handleNodeClick,
