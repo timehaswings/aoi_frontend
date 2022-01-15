@@ -2,25 +2,28 @@
   <div class="backend-menu">
     <el-row :gutter="10">
       <el-col :span="8">
-        <div>
-          <!-- <fa-icon :icon="['fab', 'accessible-icon']"></fa-icon> -->
-        </div>
+        <div></div>
         <el-card class="menu-wrapper" shadow="never" :body-style="{ padding: '10px' }">
           <el-tree
             ref="tree"
             node-key="id"
             highlight-current
+            :default-expanded-keys="[1, 2, 3]"
             :indent="18"
             :data="treeOptions.data"
             :props="treeOptions.props"
           >
             <template #default="{ node, data }">
               <div class="tree-node">
-                <span>{{ node.label }}</span>
+                <span>
+                  <i v-if="data.icon && data.icon.startsWith('el-icon-')" :class="data.icon"></i>
+                  <fa-icon v-if="data.icon && data.icon.startsWith('fa')" :icon="data.icon.split(/\s+/)"></fa-icon>
+                  <span style="margin-left: 5px">{{ node.label }}</span>
+                </span>
                 <span class="node-operation">
-                  <el-button type="text" @click.stop="handleNodeClick(data)">查 看</el-button>
-                  <el-button type="text" @click.stop="showAddModal(data)">添 加</el-button>
-                  <el-button type="text" @click.stop="del(data.id)">删 除</el-button>
+                  <el-button type="text" @click.stop="handleNodeClick(data)">查看</el-button>
+                  <el-button type="text" @click.stop="showAddModal(data)">添加</el-button>
+                  <el-button type="text" @click.stop="del(data.id)">删除</el-button>
                 </span>
               </div>
             </template>
