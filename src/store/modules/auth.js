@@ -1,4 +1,4 @@
-const common = {
+export default {
   state: {
     token: null,
     user: null,
@@ -27,5 +27,3 @@ const common = {
   },
   actions: {},
 };
-
-export default common;

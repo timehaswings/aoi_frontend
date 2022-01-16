@@ -5,7 +5,10 @@ import store from '../store';
 
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false });
 
+const config = { sign: false };
+
 const routes = [
+  /** 
   {
     path: '/',
     name: 'Index',
@@ -145,7 +148,7 @@ const routes = [
         component: () => import('../views/Backend/Comment.vue'),
       },
     ],
-  },
+  },*/
   {
     path: '/login',
     name: 'Login',
@@ -185,8 +188,17 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from) => {
   NProgress.start();
+  if (!config.sign) {
+    await store.dispatch('getPublicRoutes');
+    store.getters.publicRoutes.forEach(route => {
+      router.addRoute(route);
+    });
+    config.sign = true;
+    return to.fullPath;
+  }
+  return true;
   // //已登录
   // if(store.state.auth.token){
   //   if(['/login', '/register'].includes(to.path)){
@@ -197,7 +209,7 @@ router.beforeEach((to, from, next) => {
   // else {
   //   return next();
   // }
-  return next();
+  // return next();
 });
 
 router.afterEach(() => {

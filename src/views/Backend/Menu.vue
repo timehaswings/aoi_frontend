@@ -295,6 +295,18 @@ export default {
     };
     onMounted(() => {
       query();
+      proxy.$api.home
+        .getMenu()
+        .then(res => {
+          if (res.success) {
+            console.log(res.data);
+          } else {
+            proxy.$tips.warning('删除菜单失败：' + res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error('删除菜单失败：' + err.msg);
+        });
     });
     return {
       treeOptions,

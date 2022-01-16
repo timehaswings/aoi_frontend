@@ -1,4 +1,4 @@
-const common = {
+export default {
   state: {
     notifyMsg: 'hello world',
     isCollapse: false,
@@ -20,5 +20,3 @@ const common = {
   getters: {},
   actions: {},
 };
-
-export default common;
