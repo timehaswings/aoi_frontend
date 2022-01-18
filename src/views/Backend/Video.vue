@@ -97,14 +97,14 @@ export default {
         },
       ],
       columns: [
-        { field: 'id', title: 'ID' },
+        { field: 'id', title: 'ID', width: 60 },
         { field: 'name', title: '名称' },
         { field: 'desc', title: '描述' },
         { field: 'artists', title: '演员' },
         { field: 'sort', title: '权重' },
         { field: 'isActive', title: '激活状态', slots: { default: 'row_is_active' } },
         { field: 'releaseTime', title: '上映时间' },
-        { field: 'createTime', title: '创建时间' },
+        // { field: 'createTime', title: '创建时间' },
       ],
       data: [],
       total: 0,
@@ -136,6 +136,8 @@ export default {
           .add(params)
           .then(res => {
             if (res.success) {
+              state.query();
+              cancel();
               proxy.$tips.success(res.msg);
             } else {
               proxy.$tips.warning('添加视频失败：' + res.msg);
@@ -150,6 +152,8 @@ export default {
           .update(data)
           .then(res => {
             if (res.success) {
+              state.query();
+              cancel();
               proxy.$tips.success(res.msg);
             } else {
               proxy.$tips.warning('修改视频失败：' + res.msg);
@@ -164,6 +168,7 @@ export default {
           .del({ id: data.id })
           .then(res => {
             if (res.success) {
+              state.query();
               proxy.$tips.success(res.msg);
             } else {
               proxy.$tips.warning('删除视频失败：' + res.msg);

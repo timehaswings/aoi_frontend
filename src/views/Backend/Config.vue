@@ -48,8 +48,8 @@ export default {
         {
           field: 'module',
           span: 24,
-          title: '功能模块',
-          itemRender: { name: '$input', props: { placeholder: '请输入功能模块' } },
+          title: '模块',
+          itemRender: { name: '$input', props: { placeholder: '请输入模块' } },
         },
         {
           field: 'name',
@@ -78,7 +78,7 @@ export default {
       ],
       columns: [
         { field: 'id', title: 'ID' },
-        { field: 'module', title: '功能模块' },
+        { field: 'module', title: '模块' },
         { field: 'name', title: '名称' },
         { field: 'desc', title: '描述' },
         { field: 'codename', title: '变量键' },
