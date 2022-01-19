@@ -8,6 +8,7 @@ import videoPlayerPlus from './plugins/videoPlayer';
 import tips from './plugins/tips';
 import fontAwesome from './plugins/fontawesome';
 import auth from './directives/auth';
+import resize from './directives/resize';
 // import mock from './mock';
 import masonryPlus from './plugins/masonry';
 import 'xe-utils';
@@ -34,6 +35,7 @@ fontAwesome(app);
 
 // 加载指令
 auth(app);
+resize(app);
 
 app.use(VXETable);
 

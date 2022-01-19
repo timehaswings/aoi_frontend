@@ -1,81 +1,70 @@
 <template>
-  <div class="category">
-    <el-row>
-      <el-col :span="24">
-        <div class="filter-container">
-          <div style="width: 60px"><span>分类：</span></div>
-          <div style="flex-shrink: 0">
-            <el-radio-group v-model="queryParams.category" size="mini">
-              <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.code">
-                {{ item.name }}
-              </el-radio-button>
-            </el-radio-group>
+  <div v-resize="handleResize" style="margin-top: -10px">
+    <div class="filter-container" :style="{ width: width }">
+      <div class="title"><span>分类：</span></div>
+      <div style="flex-shrink: 0">
+        <el-radio-group v-model="queryParams.category" size="mini">
+          <el-radio-button v-for="item in categoryList" :key="item.code" :label="item.code">
+            {{ item.name }}
+          </el-radio-button>
+        </el-radio-group>
+      </div>
+    </div>
+    <div class="filter-container" :style="{ width: width }">
+      <div class="title"><span>地区：</span></div>
+      <div style="flex-shrink: 0">
+        <el-radio-group v-model="queryParams.area" size="mini">
+          <el-radio-button v-for="item in areaList" :key="item.code" :label="item.code">
+            {{ item.name }}
+          </el-radio-button>
+        </el-radio-group>
+      </div>
+    </div>
+    <div class="filter-container" :style="{ width: width }">
+      <div class="title"><span>排序：</span></div>
+      <div style="flex-shrink: 0">
+        <el-radio-group v-model="queryParams.order" size="mini">
+          <el-radio-button v-for="item in orderList" :key="item.code" :label="item.code">
+            {{ item.name }}
+          </el-radio-button>
+        </el-radio-group>
+      </div>
+    </div>
+    <div
+      ref="masonry"
+      v-masonry="containerId"
+      class="container"
+      :horizontal-order="true"
+      transition-duration="0.3s"
+      item-selector=".image-item"
+      :fit-width="true"
+      :gutter="12"
+    >
+      <el-card
+        v-for="(item, index) in blocks"
+        :key="index"
+        class="image-item"
+        shadow="never"
+        :body-style="{ padding: '0px', width: '235px', height: '324px' }"
+      >
+        <img :src="item.src" />
+        <div style="padding: 14px">
+          <span>Yummy hamburger</span>
+          <div class="bottom">
+            <time class="time">2020-01-01</time>
+            <el-button type="text" class="button">Operating</el-button>
           </div>
         </div>
-      </el-col>
-    </el-row>
-    <el-row style="margin-top: 5px">
-      <el-col :span="24">
-        <div class="filter-container">
-          <div style="width: 60px"><span>地区：</span></div>
-          <div style="flex-shrink: 0">
-            <el-radio-group v-model="queryParams.area" size="mini">
-              <el-radio-button v-for="item in areaList" :key="item.code" :label="item.code">
-                {{ item.name }}
-              </el-radio-button>
-            </el-radio-group>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row style="margin-top: 5px">
-      <el-col :span="24">
-        <div class="filter-container">
-          <div style="width: 60px"><span>排序：</span></div>
-          <div style="flex-shrink: 0">
-            <el-radio-group v-model="queryParams.order" size="mini">
-              <el-radio-button v-for="item in orderList" :key="item.code" :label="item.code">
-                {{ item.name }}
-              </el-radio-button>
-            </el-radio-group>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row justify="center" style="margin-top: 20px">
-      <el-col :span="24">
-        <div
-          v-masonry="containerId"
-          :horizontal-order="true"
-          transition-duration="0.3s"
-          item-selector=".image-item"
-          :gutter="12"
-        >
-          <div v-for="(item, index) in blocks" :key="index" v-masonry-tile class="item">
-            <el-card class="image-item" :body-style="{ padding: '0px' }">
-              <img :src="item.src" />
-              <div style="padding: 14px">
-                <span>Yummy hamburger</span>
-                <div class="bottom">
-                  <time class="time">2020-01-01</time>
-                  <el-button type="text" class="button">Operating</el-button>
-                </div>
-              </div>
-            </el-card>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row justify="right" style="margin-top: 20px">
-      <el-col :span="24">
-        <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
-      </el-col>
-    </el-row>
+      </el-card>
+    </div>
+    <div class="filter-container" :style="{ width: width }">
+      <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 
 export default {
   name: 'HomeCategory',
@@ -85,7 +74,15 @@ export default {
       area: 'all',
       order: 'default',
     });
+    onMounted(() => {
+      width.value = masonry.value.style.width;
+    });
+    const width = ref('500px');
+    const masonry = ref(null);
     const containerId = ref(100);
+    const handleResize = () => {
+      width.value = masonry.value.style.width;
+    };
     const categoryList = ref([
       { code: 'all', name: '全部' },
       { code: '1', name: '福利' },
@@ -174,13 +171,24 @@ export default {
       orderList,
       areaList,
       categoryList,
+      masonry,
+      width,
+      handleResize,
     };
   },
 };
 </script>
 
 <style scoped>
-.category {
+.container {
+  margin: 0 auto;
+  padding-top: 5px;
+}
+
+.title {
+  width: 60px;
+  font-weight: 600;
+  color: #409eff;
 }
 
 .image-item {
@@ -191,5 +199,7 @@ export default {
   display: flex;
   flex-flow: nowrap row;
   align-items: center;
+  margin: 0 auto;
+  padding: 3px 0;
 }
 </style>
