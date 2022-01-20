@@ -76,3 +76,25 @@ export const getArea = params =>
     method: 'get',
     params,
   });
+
+/**
+ * 获取首页轮播数据
+ * @param {*} params
+ */
+export const getIndexCarousel = params =>
+  request({
+    url: '/api/v1/home/index/carousel',
+    method: 'get',
+    params,
+  });
+
+/**
+ * 获取首页分类数据
+ * @param {*} params
+ */
+export const getIndexCategory = params =>
+  request({
+    url: '/api/v1/home/index/category',
+    method: 'get',
+    params,
+  });

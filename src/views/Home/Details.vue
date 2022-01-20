@@ -38,6 +38,9 @@
         </el-tabs>
       </el-col>
     </el-row>
+    <el-row>
+      <el-col>ss</el-col>
+    </el-row>
   </div>
 </template>
 
@@ -56,7 +59,8 @@ export default {
       release: '2020-09',
       desc: '我想做个好人。。',
       avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-      src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
+      // src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
+      src: 'https://www.baidu.com',
     });
     const activities = ref([
       {

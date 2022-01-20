@@ -56,15 +56,14 @@
           </template>
           <template #error>
             <div class="image-slot">
-              <el-icon size="42"><Picture /></el-icon>
+              <el-icon :size="42"><Picture /></el-icon>
             </div>
           </template>
         </el-image>
         <div style="padding: 14px">
-          <span>{{ video.name }}</span>
-          <div class="bottom">
+          <span class="video-title">{{ video.name }}</span>
+          <div class="vidoe-desc">
             <span>{{ video.desc }}</span>
-            <time class="time">{{ video.updateTime }}</time>
           </div>
         </div>
       </el-card>
@@ -194,6 +193,17 @@ export default {
   width: 60px;
   font-weight: 600;
   color: #409eff;
+}
+
+.video-title {
+  font-weight: 500;
+  line-height: 28px;
+  color: var(--el-text-color-regular);
+}
+
+.vidoe-desc {
+  line-height: 24px;
+  color: var(--el-text-color-secondary);
 }
 
 .image-item {

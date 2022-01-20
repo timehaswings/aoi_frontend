@@ -1,45 +1,54 @@
 <template>
   <div>
     <el-carousel :interval="carouselConfig.interval" type="card" :height="carouselConfig.height">
-      <el-carousel-item v-for="item in carouselConfig.data" :key="item">
-        <el-image :src="item.url">
+      <el-carousel-item v-for="item in carouselConfig.data" :key="item.id">
+        <el-image :src="item.url" :style="{ height: carouselConfig.height }">
           <template #placeholder>
             <div class="image-slot">
               Loading
               <span class="dot">...</span>
             </div>
           </template>
+          <template #error>
+            <div class="image-slot">
+              <el-icon :size="42"><Picture /></el-icon>
+            </div>
+          </template>
         </el-image>
       </el-carousel-item>
     </el-carousel>
 
-    <div v-for="item in data" :key="item.id" style="margin-top: 30px">
+    <div v-for="item in categoryData" :key="item.id" style="margin-top: 30px">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">主页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ item.category }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">分类</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ item.name }}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-row v-for="(o, index) in rows(item.videos)" :key="o" :gutter="20" style="margin-top: 15px">
-        <el-col v-for="col in videoRange(item.videos, index)" :key="col.name" :span="24 / carouselConfig.colNumber">
-          <el-card :body-style="{ padding: '0px' }">
-            <el-image :src="col.avator" class="image">
+      <el-row v-for="(o, index) in rows(item.videoList)" :key="o" :gutter="20" style="margin-top: 15px">
+        <el-col
+          v-for="video in videoRange(item.videoList, index)"
+          :key="video.id"
+          :span="24 / carouselConfig.colNumber"
+        >
+          <el-card shadow="never" :body-style="{ padding: '0px', 'text-align': 'center' }">
+            <el-image :src="video.url" style="height: 200px">
               <template #placeholder>
-                <div class="image-slot">
+                <div class="col-image-slot" style="line-height: 200px">
                   Loading
                   <span class="dot">...</span>
                 </div>
               </template>
               <template #error>
-                <div class="image-slot">
-                  <el-icon><icon-picture /></el-icon>
+                <div class="col-image-slot" style="line-height: 200px">
+                  <el-icon :size="32"><Picture /></el-icon>
                 </div>
               </template>
             </el-image>
             <div style="padding: 14px">
-              <div class="video-title">{{ col.name }}</div>
-              <div class="time">{{ col.desc }}</div>
+              <div class="video-title">{{ video.name }}</div>
+              <div class="time">{{ video.desc }}</div>
               <div class="left-right-wrapper time">
-                <span>{{ col.artist }}</span>
-                <span>{{ col.release }}</span>
+                <span>{{ video.artists }}</span>
+                <span>{{ video.releaseTime }}</span>
               </div>
             </div>
           </el-card>
@@ -50,25 +59,54 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
-import { Picture as IconPicture } from '@element-plus/icons';
+import { ref, reactive, getCurrentInstance, onMounted } from 'vue';
+import { Picture } from '@element-plus/icons';
 
 export default {
   name: 'HomeIndex',
-  components: { IconPicture },
+  components: {
+    Picture,
+  },
   setup() {
+    const { proxy } = getCurrentInstance();
     const carouselConfig = reactive({
       interval: 4000,
       height: '400px',
       colNumber: 4,
-      data: [
-        { name: '张三', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-        { name: '李四', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-        { name: '王五', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-        { name: '赵六', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-        { name: '王二', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-        { name: '九九', url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-      ],
+      data: [],
+    });
+    const categoryData = ref([]);
+    const getCarousel = () => {
+      proxy.$api.home
+        .getIndexCarousel()
+        .then(res => {
+          if (res.success) {
+            carouselConfig.data = res.data;
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
+    const getCategory = () => {
+      proxy.$api.home
+        .getIndexCategory()
+        .then(res => {
+          if (res.success) {
+            categoryData.value = res.data;
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
+    onMounted(() => {
+      getCarousel();
+      getCategory();
     });
     const rows = videos => {
       return Math.ceil(videos.length / carouselConfig.colNumber);
@@ -78,93 +116,9 @@ export default {
       const end = tmp > videos.length ? videos.length : tmp;
       return videos.slice(index * carouselConfig.colNumber, end);
     };
-    const data = reactive([
-      {
-        id: 1,
-        category: '精彩推荐',
-        videos: [
-          {
-            name: '无间道1',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道2',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道3',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道4',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道5',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-        ],
-      },
-      {
-        id: 2,
-        category: '福利',
-        videos: [
-          {
-            name: '无间道6',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道7',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道8',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道9',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-          {
-            name: '无间道10',
-            artist: '刘德华，梁朝伟，曾志伟',
-            release: '2020-09',
-            desc: '我想做个好人。。',
-            avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-          },
-        ],
-      },
-    ]);
     return {
       carouselConfig,
-      data,
+      categoryData,
       rows,
       videoRange,
     };
@@ -176,6 +130,20 @@ export default {
 .video-title {
   font-size: 14px;
   color: var(--el-color-primary);
+  text-align: left;
+}
+
+.image-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--el-text-color-secondary);
+}
+
+.col-image-slot {
+  color: var(--el-text-color-secondary);
 }
 
 .bottom {
@@ -191,5 +159,6 @@ export default {
   line-height: 12px;
   font-size: 13px;
   color: #999;
+  text-align: left;
 }
 </style>

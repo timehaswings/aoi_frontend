@@ -17,7 +17,7 @@ const recursionMenu = (route, menus) => {
       route.children = [];
     }
     menus.forEach(subMenu => {
-      if (subMenu.url && subMenu.component) {
+      if (subMenu.component !== '/') {
         const subRoute = transform(subMenu);
         route.children.push(subRoute);
         if (subMenu.children) {
