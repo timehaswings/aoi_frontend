@@ -32,3 +32,47 @@ export const getPrivateMenu = params =>
     method: 'get',
     params,
   });
+
+/**
+ * 获取视频
+ * @param {*} params
+ */
+export const getVideo = params =>
+  request({
+    url: '/api/v1/home/video',
+    method: 'get',
+    params,
+  });
+
+/**
+ * 获取分类
+ * @param {*} params
+ */
+export const getCategory = params =>
+  request({
+    url: '/api/v1/home/category',
+    method: 'get',
+    params,
+  });
+
+/**
+ * 获取标签
+ * @param {*} params
+ */
+export const getTag = params =>
+  request({
+    url: '/api/v1/home/tag',
+    method: 'get',
+    params,
+  });
+
+/**
+ * 获取地区
+ * @param {*} params
+ */
+export const getArea = params =>
+  request({
+    url: '/api/v1/home/area',
+    method: 'get',
+    params,
+  });
