@@ -32,6 +32,48 @@ const recursionMenu = (route, menus) => {
   }
 };
 
+const getRouterFromMenu = menu => {
+  const routes = [];
+  if (menu !== null && menu.length === 1) {
+    const route = transform(menu[0]);
+    if (menu[0].children) {
+      recursionMenu(route, menu[0].children);
+    }
+    routes.push(route);
+  }
+  return routes;
+};
+
+const recursionNav = (nav, menus) => {
+  if (menus && menus.length) {
+    if (!nav.children) {
+      nav.children = [];
+    }
+    menus.forEach(subMenu => {
+      const path = nav.path.endsWith('/') ? nav.path + subMenu.url : nav.path + '/' + subMenu.url;
+      const hasChildren = subMenu.children && subMenu.children.length;
+      const subNav = { id: subMenu.id, path: path, name: subMenu.name, icon: subMenu.icon, isLeaf: !hasChildren };
+      nav.children.push(subNav);
+      if (hasChildren) {
+        recursionNav(subNav, subMenu.children);
+      }
+    });
+  }
+};
+
+const getMenuNav = menu => {
+  const navs = [];
+  if (menu !== null && menu.length === 1) {
+    const hasChildren = menu[0].children && menu[0].children.length;
+    const nav = { id: menu[0].id, path: menu[0].url, name: menu[0].name, icon: menu[0].icon, isLeaf: !hasChildren };
+    if (hasChildren) {
+      recursionNav(nav, menu[0].children);
+      return nav.children;
+    }
+  }
+  return navs;
+};
+
 export default {
   state: {
     title: 'AOI VIDEO',
@@ -56,54 +98,33 @@ export default {
     hasPrivateRoute: state => {
       return state.privateRoutes !== null ? true : false;
     },
-    getBackendMenu: state => {
-      return state.privateRoutes !== null ? true : false;
+    backendMenu: state => {
+      return getMenuNav(state.privateRoutes);
+    },
+    frontendMenu: state => {
+      return getMenuNav(state.publicRoutes);
     },
     privateRoutes: state => {
-      const routes = [];
-      if (state.privateRoutes !== null && state.privateRoutes.length === 1 && state.privateRoutes[0].children) {
-        state.privateRoutes[0].children.forEach(item => {
-          const route = transform(item);
-          if (item.children) {
-            recursionMenu(route, item.children);
-          }
-          routes.push(route);
-        });
-      }
-      return routes;
+      return getRouterFromMenu(state.privateRoutes);
     },
     publicRoutes: state => {
-      const routes = [];
-      if (state.publicRoutes !== null && state.publicRoutes.length === 1 && state.publicRoutes[0].children) {
-        state.publicRoutes[0].children.forEach(item => {
-          const route = transform(item);
-          if (item.children) {
-            recursionMenu(route, item.children);
-          }
-          routes.push(route);
-        });
-      }
-      return routes;
+      return getRouterFromMenu(state.publicRoutes);
     },
   },
   actions: {
-    async getPublicRoutes({ commit, state }) {
-      if (state.publicRoutes === null) {
-        await api.home.getPublicMenu().then(res => {
-          if (res.success) {
-            commit('SET_PUBLIC_ROUTES', res.data);
-          }
-        });
-      }
+    async getPublicRoutes({ commit }) {
+      await api.home.getPublicMenu().then(res => {
+        if (res.success) {
+          commit('SET_PUBLIC_ROUTES', res.data);
+        }
+      });
     },
-    async getPrivateRoutes({ commit, state }) {
-      if (state.privateRoutes === null) {
-        await api.home.getPrivateMenu().then(res => {
-          if (res.success) {
-            commit('SET_PRIVATE_ROUTES', res.data);
-          }
-        });
-      }
+    async getPrivateRoutes({ commit }) {
+      await api.home.getPrivateMenu().then(res => {
+        if (res.success) {
+          commit('SET_PRIVATE_ROUTES', res.data);
+        }
+      });
     },
   },
 };

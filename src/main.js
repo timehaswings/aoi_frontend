@@ -7,6 +7,7 @@ import installElementPlus from './plugins/element';
 import videoPlayerPlus from './plugins/videoPlayer';
 import tips from './plugins/tips';
 import fontAwesome from './plugins/fontawesome';
+import errorMonitor from './plugins/errorMonitor';
 import auth from './directives/auth';
 import resize from './directives/resize';
 // import mock from './mock';
@@ -20,6 +21,8 @@ import './assets/css/app.css';
 
 const app = createApp(App);
 app.config.globalProperties.$api = api;
+
+errorMonitor.run();
 
 // 加载插件
 installElementPlus(app);

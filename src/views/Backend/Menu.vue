@@ -38,15 +38,18 @@
               </el-button>
               <el-button class="hvr-radial-out" type="primary" size="small" @click="menu = null">关闭</el-button>
             </template>
-            <el-descriptions-item label="ID">{{ menu.id }}</el-descriptions-item>
+            <el-descriptions-item label="名称">{{ menu.name }}</el-descriptions-item>
             <el-descriptions-item label="URL">{{ menu.url }}</el-descriptions-item>
             <el-descriptions-item label="组件">{{ menu.component }}</el-descriptions-item>
             <el-descriptions-item label="图标">{{ menu.icon }}</el-descriptions-item>
             <el-descriptions-item label="类型">
               <el-tag size="small">{{ typeMapper[menu.type] }}</el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="需要登录">
-              <el-tag size="small" type="warning">{{ menu.requireLogin ? '是' : '否' }}</el-tag>
+            <el-descriptions-item label="是否为导航">
+              <el-tag size="small" type="warning">{{ menu.isNav ? '是' : '否' }}</el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="是否展示">
+              <el-tag size="small" type="success">{{ menu.isShow ? '展示' : '隐藏' }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="是否启用">
               <el-tag size="small" type="info">{{ activeMapper[menu.isActive] }}</el-tag>
@@ -119,11 +122,19 @@
                 </vxe-select>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="登录" field="requireLogin" span="24">
+            <vxe-form-item title="导航" field="isNav" span="24">
               <template #default="{ data }">
-                <vxe-select v-model="data.requireLogin" placeholder="请选择是否需要登录">
+                <vxe-select v-model="data.isNav" placeholder="请选择是否为导航">
                   <vxe-option :value="true" label="是"></vxe-option>
                   <vxe-option :value="false" label="否"></vxe-option>
+                </vxe-select>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item title="展示" field="isShow" span="24">
+              <template #default="{ data }">
+                <vxe-select v-model="data.isShow" placeholder="请选择是否展示">
+                  <vxe-option :value="true" label="展示"></vxe-option>
+                  <vxe-option :value="false" label="隐藏"></vxe-option>
                 </vxe-select>
               </template>
             </vxe-form-item>
@@ -191,7 +202,8 @@ export default {
     const defaultData = {
       type: 'router',
       isActive: true,
-      requireLogin: false,
+      isNav: true,
+      isShow: true,
       sort: 100,
     };
     const formOptions = reactive({
@@ -232,17 +244,14 @@ export default {
     };
     const add = data => {
       data.parentId = modalOptions.nodeData.id;
-      // menuLoading.value = true;
       proxy.$api.menu
         .add(data)
         .then(res => {
-          // menuLoading.value = false;
           if (res.success) {
             query();
             modalOptions.modalVisible = false;
             proxy.$tips.success(res.msg);
           } else {
-            // menuLoading.value = false;
             proxy.$tips.warning('添加菜单失败：' + res.msg);
           }
         })
@@ -254,11 +263,9 @@ export default {
         });
     };
     const update = data => {
-      menuLoading.value = true;
       proxy.$api.menu
         .update(data)
         .then(res => {
-          menuLoading.value = false;
           if (res.success) {
             query();
             modalOptions.modalVisible = false;
@@ -268,16 +275,13 @@ export default {
           }
         })
         .catch(err => {
-          menuLoading.value = false;
           proxy.$tips.error('修改菜单失败：' + err.msg);
         });
     };
     const del = id => {
-      menuLoading.value = true;
       proxy.$api.menu
         .del({ id })
         .then(res => {
-          menuLoading.value = false;
           if (res.success) {
             query();
             proxy.$tips.success(res.msg);
@@ -286,7 +290,6 @@ export default {
           }
         })
         .catch(err => {
-          menuLoading.value = false;
           proxy.$tips.error('删除菜单失败：' + err.msg);
         });
     };

@@ -12,32 +12,14 @@
       :ellipsis="false"
       router
     >
-      <el-menu-item index="/">
-        <component :is="icons['home-filled']" class="icon"></component>
-        主页
-      </el-menu-item>
-      <el-menu-item index="/category">
-        <component :is="icons['grid']" class="icon"></component>
-        分类
-      </el-menu-item>
-      <el-menu-item index="/member">
-        <component :is="icons['briefcase']" class="icon"></component>
-        会员
-      </el-menu-item>
-      <el-menu-item index="/about">
-        <component :is="icons['help-filled']" class="icon"></component>
-        关于
-      </el-menu-item>
+      <menu-item :nav-list="openNav"></menu-item>
       <el-menu-item v-if="!isLogin" index="/login">
         <component :is="icons['user']" class="icon"></component>
         登录
       </el-menu-item>
       <el-sub-menu v-else index="#">
         <template #title>{{ timeState() }}{{ username }}</template>
-        <el-menu-item index="/personal">
-          <component :is="icons['user']" class="icon"></component>
-          个人中心
-        </el-menu-item>
+        <menu-item :nav-list="shrinkNav"></menu-item>
         <el-menu-item index="#" @click="goBackend">
           <component :is="icons['box']" class="icon"></component>
           后台管理
@@ -54,18 +36,21 @@
 <script>
 import { Grid, HomeFilled, User, Briefcase, HelpFilled, Position, Box } from '@element-plus/icons';
 import logo from '@/assets/logo.ico';
+import MenuItem from '@/components/MenuItem/Index.vue';
 import { useRouter, useRoute } from 'vue-router';
-import { ref, shallowRef, computed, getCurrentInstance } from 'vue';
+import { ref, shallowRef, computed, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
   name: 'HomeHeader',
+  components: { MenuItem },
   setup() {
     const { proxy } = getCurrentInstance();
     const route = useRoute();
     const active = ref(route.path);
     const store = useStore();
     const router = useRouter();
+    const navLength = ref(5);
     const icons = shallowRef({
       grid: Grid,
       'home-filled': HomeFilled,
@@ -74,6 +59,23 @@ export default {
       'help-filled': HelpFilled,
       position: Position,
       box: Box,
+    });
+    onMounted(() => {
+      console.log(store.getters.backendMenu);
+    });
+    const openNav = computed(() => {
+      const menus = store.getters.frontendMenu;
+      if (navLength.value - 1 >= menus.length) {
+        return menus;
+      }
+      return menus.slice(0, navLength.value - 1);
+    });
+    const shrinkNav = computed(() => {
+      const menus = store.getters.frontendMenu;
+      if (navLength.value - 1 >= menus.length) {
+        return [];
+      }
+      return menus.slice(navLength.value - 1, menus.length - 1);
     });
     const logout = () => {
       proxy
@@ -85,6 +87,7 @@ export default {
         .then(() => {
           store.commit('SET_TOKEN', null);
           store.commit('SET_USER', null);
+          store.commit('SET_PRIVATE_ROUTES', null);
           router.push('/');
         })
         .catch(() => {});
@@ -108,11 +111,14 @@ export default {
       active,
       icons,
       logo,
-      isLogin: computed(() => store.getters.isLogin),
-      username: computed(() => store.getters.username),
+      navLength,
       goBackend,
       timeState,
       logout,
+      openNav,
+      shrinkNav,
+      isLogin: computed(() => store.getters.isLogin),
+      username: computed(() => store.getters.username),
     };
   },
 };

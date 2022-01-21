@@ -49,24 +49,26 @@ const router = createRouter({
   routes,
 });
 
-const addRoute = route => {
-  if (router.hasRoute(route.name)) {
-    router.removeRoute(route.name);
-  }
-  router.addRoute(route);
-};
-
 router.beforeEach(async (to, from) => {
   performance.start = Date.now();
   performance.to = to;
   performance.from = from;
   NProgress.start();
+  // 获取不受限的路由
+  if (!sign.hasPublicRoutes) {
+    await store.dispatch('getPublicRoutes');
+    store.getters.publicRoutes.forEach(route => {
+      router.addRoute(route);
+    });
+    sign.hasPublicRoutes = true;
+    return to.fullPath;
+  }
   if (store.state.auth.token) {
     if (!sign.hasPrivateRoutes) {
       // 获取受限的路由
       await store.dispatch('getPrivateRoutes');
       store.getters.privateRoutes.forEach(route => {
-        addRoute(route);
+        router.addRoute(route);
       });
       sign.hasPrivateRoutes = true;
       return to.fullPath;
@@ -74,16 +76,6 @@ router.beforeEach(async (to, from) => {
     // 登录成功后不能访问登录、注册接口
     if (['/login', '/register'].includes(to.path)) {
       return '/';
-    }
-  } else {
-    // 获取不受限的路由
-    if (!sign.hasPublicRoutes) {
-      await store.dispatch('getPublicRoutes');
-      store.getters.publicRoutes.forEach(route => {
-        addRoute(route);
-      });
-      sign.hasPublicRoutes = true;
-      return to.fullPath;
     }
   }
   return true;
