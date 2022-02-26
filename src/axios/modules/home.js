@@ -98,3 +98,14 @@ export const getIndexCategory = params =>
     method: 'get',
     params,
   });
+
+/**
+ * 获取视频推荐
+ * @param {*} params
+ */
+export const getRecommendVideo = params =>
+  request({
+    url: '/api/v1/home/video/recommend',
+    method: 'get',
+    params,
+  });

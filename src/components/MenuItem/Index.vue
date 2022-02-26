@@ -61,3 +61,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.icon {
+  width: 1em;
+  height: 1em;
+  margin-right: 10px;
+}
+</style>

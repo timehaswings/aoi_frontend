@@ -1,21 +1,26 @@
 <template>
   <div class="details">
     <el-row>
-      <el-col><el-page-header content="视频播放" /></el-col>
+      <el-col><el-page-header :content="video.name" /></el-col>
     </el-row>
     <el-row class="mbt15">
-      <el-col><aoi-player :src="video.src"></aoi-player></el-col>
+      <el-col><aoi-player :src="video.m3u8"></aoi-player></el-col>
     </el-row>
     <el-row>
       <el-col>
         <el-tabs type="card" stretch class="plr10">
           <el-tab-pane label="相关推荐">
-            <el-descriptions class="plr10" :title="video.name" :column="1">
+            <el-descriptions class="plr10" :column="1">
               <el-descriptions-item label="影片简介：">{{ video.desc }}</el-descriptions-item>
-              <el-descriptions-item label="领衔主演：">{{ video.artist }}</el-descriptions-item>
-              <el-descriptions-item label="上映时间：">{{ video.release }}</el-descriptions-item>
+              <el-descriptions-item label="领衔主演：">{{ video.artists }}</el-descriptions-item>
+              <el-descriptions-item label="上映时间：">{{ video.releaseTime }}</el-descriptions-item>
             </el-descriptions>
-            <el-button-group size="small">
+            <div style="margin: 5px 0 10px 10px">
+              <el-tag v-for="tag in video.tagsList" :key="tag.id" type="success" effect="dark">
+                {{ tag.name }}
+              </el-tag>
+            </div>
+            <el-button-group size="small" style="margin-left: 10px">
               <el-button type="primary">
                 <el-icon><edit /></el-icon>
               </el-button>
@@ -38,45 +43,73 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col>ss</el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, shallowRef } from 'vue';
+import { ref, onMounted, getCurrentInstance, shallowRef } from 'vue';
 import AoiPlayer from '@/components/AoiPlayer/Index.vue';
-import { Grid, HomeFilled, ArrowLeft, Briefcase, HelpFilled, Edit, Share, Delete } from '@element-plus/icons';
+import { useRoute } from 'vue-router';
+import { Edit, Share, Delete } from '@element-plus/icons';
 
 export default {
   name: 'Details',
-  components: { AoiPlayer, HomeFilled, ArrowLeft, Edit, Share, Delete },
-  setup(props) {
+  components: { AoiPlayer, Edit, Share, Delete },
+  setup() {
+    const route = useRoute();
+    const { proxy } = getCurrentInstance();
+    const getVideo = id => {
+      proxy.$api.home
+        .getVideo({ id })
+        .then(res => {
+          if (res.success && res.data.rows.length === 1) {
+            video.value = res.data.rows[0];
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
+    const getRecommend = id => {
+      proxy.$api.home
+        .getRecommendVideo({ id })
+        .then(res => {
+          if (res.success) {
+            console.log(res.data);
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
     const video = ref({
-      name: '无间道8',
-      artist: '刘德华，梁朝伟，曾志伟',
-      release: '2020-09',
-      desc: '我想做个好人。。',
-      avator: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-      // src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
-      src: 'https://www.baidu.com',
+      name: null,
+      artists: null,
+      releaseTime: null,
+      desc: null,
+      thumb: null,
+      m3u8: null,
+      tagsList: [],
     });
     const activities = ref([
       {
         content: 'Event start',
         timestamp: '2018-04-15',
       },
-      {
-        content: 'Approved',
-        timestamp: '2018-04-13',
-      },
-      {
-        content: 'Success',
-        timestamp: '2018-04-11',
-      },
     ]);
-    onMounted(() => {});
+    onMounted(() => {
+      const { id } = route.query;
+      if (!id) {
+        proxy.$tips.warning('url出错!');
+      } else {
+        getVideo(id);
+        getRecommend(id);
+      }
+    });
     return {
       video,
       activities,

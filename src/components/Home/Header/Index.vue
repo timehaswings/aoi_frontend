@@ -126,9 +126,9 @@ export default {
 
 <style scoped>
 .icon {
-  width: 1.125em;
-  height: 1.125em;
-  margin-right: 5px;
+  width: 1em;
+  height: 1em;
+  margin-right: 10px;
 }
 
 .logo-wrapper {
