@@ -109,3 +109,14 @@ export const getRecommendVideo = params =>
     method: 'get',
     params,
   });
+
+/**
+ * 获取视频评论
+ * @param {*} params
+ */
+export const getVideoComment = params =>
+  request({
+    url: '/api/v1/home/video/comment',
+    method: 'get',
+    params,
+  });

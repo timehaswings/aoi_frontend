@@ -32,11 +32,36 @@
               </el-button>
             </el-button-group>
             <el-divider></el-divider>
+            <el-row :gutter="10">
+              <el-col v-for="video in videoList" :key="video.id" :xs="24" :sm="12" :md="6" :lg="4" :xl="3">
+                <el-card class="image-item" shadow="never" :body-style="{ padding: '0px' }">
+                  <el-image style="width: 100%; min-height: 240px" :src="video.thumb" fit="contain">
+                    <template #placeholder>
+                      <div class="image-slot">
+                        Loading
+                        <span class="dot">...</span>
+                      </div>
+                    </template>
+                    <template #error>
+                      <div class="image-slot">
+                        <el-icon :size="42"><Picture /></el-icon>
+                      </div>
+                    </template>
+                  </el-image>
+                  <div style="padding: 14px">
+                    <span class="video-title">{{ video.name }}</span>
+                    <div class="vidoe-desc">
+                      <span>{{ video.desc }}</span>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="评论">
             <el-timeline>
-              <el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp">
-                {{ activity.content }}
+              <el-timeline-item v-for="comment in comments" :key="comment.id" :timestamp="comment.createTime">
+                {{ comment.content }}
               </el-timeline-item>
             </el-timeline>
           </el-tab-pane>
@@ -47,17 +72,20 @@
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance, shallowRef } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 import AoiPlayer from '@/components/AoiPlayer/Index.vue';
-import { useRoute } from 'vue-router';
-import { Edit, Share, Delete } from '@element-plus/icons';
+import { useRoute, useRouter } from 'vue-router';
+import { Edit, Share, Delete, Picture } from '@element-plus/icons';
 
 export default {
   name: 'Details',
-  components: { AoiPlayer, Edit, Share, Delete },
+  components: { AoiPlayer, Edit, Share, Delete, Picture },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const { proxy } = getCurrentInstance();
+    const videoList = ref([]);
+    const comments = ref([]);
     const getVideo = id => {
       proxy.$api.home
         .getVideo({ id })
@@ -72,12 +100,26 @@ export default {
           proxy.$tips.error(err.msg);
         });
     };
+    const getComment = id => {
+      proxy.$api.home
+        .getVideoComment({ id })
+        .then(res => {
+          if (res.success) {
+            comments.value = res.data.rows;
+          } else {
+            proxy.$tips.warning(res.msg);
+          }
+        })
+        .catch(err => {
+          proxy.$tips.error(err.msg);
+        });
+    };
     const getRecommend = id => {
       proxy.$api.home
         .getRecommendVideo({ id })
         .then(res => {
           if (res.success) {
-            console.log(res.data);
+            videoList.value = res.data;
           } else {
             proxy.$tips.warning(res.msg);
           }
@@ -95,24 +137,20 @@ export default {
       m3u8: null,
       tagsList: [],
     });
-    const activities = ref([
-      {
-        content: 'Event start',
-        timestamp: '2018-04-15',
-      },
-    ]);
     onMounted(() => {
       const { id } = route.query;
       if (!id) {
-        proxy.$tips.warning('url出错!');
+        router.replace({ name: 'Page404' });
       } else {
         getVideo(id);
         getRecommend(id);
+        getComment(id);
       }
     });
     return {
       video,
-      activities,
+      comments,
+      videoList,
     };
   },
 };
@@ -131,6 +169,21 @@ export default {
 
   .el-descriptions__body {
     background-color: transparent;
+  }
+
+  .image-item {
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  .image-slot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #f5f7fa;
+    color: var(--el-text-color-secondary);
   }
 }
 </style>

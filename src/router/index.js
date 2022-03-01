@@ -4,8 +4,7 @@ import 'nprogress/nprogress.css';
 import store from '../store';
 
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false });
-
-const sign = { hasPublicRoutes: false, hasPrivateRoutes: false };
+const sign = { hasPublicRoutesAdded: false, hasPrivateRoutesAdded: false };
 const performance = { start: 0, end: 0, duration: 0, to: null, from: null };
 
 /** 静态路由 */
@@ -28,7 +27,7 @@ const routes = [
   },
   {
     path: '/403',
-    name: '403',
+    name: 'Page403',
     meta: {
       title: '没有权限',
     },
@@ -36,7 +35,7 @@ const routes = [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: '404',
+    name: 'Page404',
     meta: {
       title: 'NotFound',
     },
@@ -49,28 +48,49 @@ const router = createRouter({
   routes,
 });
 
+// 刷新时，重新获取路由信息
+if (window) {
+  window.onbeforeunload = async () => {
+    await store.dispatch('getPublicRoutes');
+    sign.hasPublicRoutesAdded = false;
+    if (store.state.auth.token) {
+      await store.dispatch('getPrivateRoutes');
+      sign.hasPrivateRoutesAdded = false;
+    }
+    const e = e || window.event;
+    if (e) {
+      e.returnValue = undefined;
+    }
+    return undefined;
+  };
+}
+
 router.beforeEach(async (to, from) => {
   performance.start = Date.now();
   performance.to = to;
   performance.from = from;
   NProgress.start();
   // 获取不受限的路由
-  if (!sign.hasPublicRoutes) {
+  if (!store.getters.hasPublicRoute) {
     await store.dispatch('getPublicRoutes');
+  }
+  if (!sign.hasPublicRoutesAdded) {
     store.getters.publicRoutes.forEach(route => {
       router.addRoute(route);
     });
-    sign.hasPublicRoutes = true;
+    sign.hasPublicRoutesAdded = true;
     return to.fullPath;
   }
   if (store.state.auth.token) {
-    if (!sign.hasPrivateRoutes) {
+    if (!store.getters.hasPrivateRoute) {
       // 获取受限的路由
       await store.dispatch('getPrivateRoutes');
+    }
+    if (!sign.hasPrivateRoutesAdded) {
       store.getters.privateRoutes.forEach(route => {
         router.addRoute(route);
       });
-      sign.hasPrivateRoutes = true;
+      sign.hasPrivateRoutesAdded = true;
       return to.fullPath;
     }
     // 登录成功后不能访问登录、注册接口

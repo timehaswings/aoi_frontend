@@ -28,4 +28,18 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.about {
+  width: 100%;
+  height: 100%;
+  min-width: 1000px;
+  z-index: -10;
+  zoom: 1;
+  background-color: #fff;
+  background: url('@/assets/img/aboutbg.jpg');
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-position: center 0;
+}
+</style>

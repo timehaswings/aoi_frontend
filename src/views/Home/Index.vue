@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-carousel :interval="carouselConfig.interval" type="card" :height="carouselConfig.height">
-      <el-carousel-item v-for="item in carouselConfig.data" :key="item.id">
+      <el-carousel-item v-for="item in carouselConfig.data" :key="item.id" @click="goDetails(item.id)">
         <el-image :src="item.url" :style="{ height: carouselConfig.height }">
           <template #placeholder>
             <div class="image-slot">
@@ -29,7 +29,7 @@
           :key="video.id"
           :span="24 / carouselConfig.colNumber"
         >
-          <el-card shadow="never" :body-style="{ padding: '0px', 'text-align': 'center' }">
+          <el-card shadow="never" :body-style="{ padding: '0px', 'text-align': 'center' }" @click="goDetails(item.id)">
             <el-image :src="video.url" style="height: 200px">
               <template #placeholder>
                 <div class="col-image-slot" style="line-height: 200px">
@@ -61,6 +61,7 @@
 <script>
 import { ref, reactive, getCurrentInstance, onMounted } from 'vue';
 import { Picture } from '@element-plus/icons';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'HomeIndex',
@@ -69,6 +70,7 @@ export default {
   },
   setup() {
     const { proxy } = getCurrentInstance();
+    const router = useRouter();
     const carouselConfig = reactive({
       interval: 4000,
       height: '400px',
@@ -89,6 +91,9 @@ export default {
         .catch(err => {
           proxy.$tips.error(err.msg);
         });
+    };
+    const goDetails = id => {
+      router.push('/details?id=' + id);
     };
     const getCategory = () => {
       proxy.$api.home
@@ -121,6 +126,7 @@ export default {
       categoryData,
       rows,
       videoRange,
+      goDetails,
     };
   },
 };
