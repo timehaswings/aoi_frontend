@@ -20,9 +20,9 @@
                 {{ tag.name }}
               </el-tag>
             </div>
-            <el-button-group size="small" style="margin-left: 10px">
+            <el-button-group style="margin-left: 10px">
               <el-button type="primary">
-                <el-icon><edit /></el-icon>
+                <el-icon><star /></el-icon>
               </el-button>
               <el-button type="primary">
                 <el-icon><share /></el-icon>
@@ -32,7 +32,7 @@
               </el-button>
             </el-button-group>
             <el-divider></el-divider>
-            <el-row :gutter="10">
+            <el-row :gutter="20">
               <el-col v-for="video in videoList" :key="video.id" :xs="24" :sm="12" :md="6" :lg="4" :xl="3">
                 <el-card class="image-item" shadow="never" :body-style="{ padding: '0px' }">
                   <el-image style="width: 100%; min-height: 240px" :src="video.thumb" fit="contain">
@@ -72,20 +72,34 @@
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, onMounted, onUnmounted, getCurrentInstance } from 'vue';
 import AoiPlayer from '@/components/AoiPlayer/Index.vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Edit, Share, Delete, Picture } from '@element-plus/icons';
+import { useStore } from 'vuex';
+import { Star, Share, Delete, Picture } from '@element-plus/icons';
 
 export default {
   name: 'Details',
-  components: { AoiPlayer, Edit, Share, Delete, Picture },
+  components: { AoiPlayer, Star, Share, Delete, Picture },
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const { proxy } = getCurrentInstance();
     const videoList = ref([]);
     const comments = ref([]);
+    const isLogin = computed(() => store.getters.isLogin);
+    const userTravel = (id, operation) => {
+      if (!isLogin.value) {
+        return;
+      }
+      const params = {
+        videoId: id,
+        userId: store.state.auth.user.id,
+        operation,
+      };
+      proxy.$api.userTravel.add(params);
+    };
     const getVideo = id => {
       proxy.$api.home
         .getVideo({ id })
@@ -143,9 +157,13 @@ export default {
         router.replace({ name: 'Page404' });
       } else {
         getVideo(id);
+        userTravel(id, 'come');
         getRecommend(id);
         getComment(id);
       }
+    });
+    onUnmounted(() => {
+      userTravel(id, 'leave');
     });
     return {
       video,

@@ -48,23 +48,6 @@ const router = createRouter({
   routes,
 });
 
-// 刷新时，重新获取路由信息
-if (window) {
-  window.onbeforeunload = async () => {
-    await store.dispatch('getPublicRoutes');
-    sign.hasPublicRoutesAdded = false;
-    if (store.state.auth.token) {
-      await store.dispatch('getPrivateRoutes');
-      sign.hasPrivateRoutesAdded = false;
-    }
-    const e = e || window.event;
-    if (e) {
-      e.returnValue = undefined;
-    }
-    return undefined;
-  };
-}
-
 router.beforeEach(async (to, from) => {
   performance.start = Date.now();
   performance.to = to;

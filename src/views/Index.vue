@@ -14,11 +14,10 @@
 <script>
 import HomeHeader from '../components/Home/Header/Index.vue';
 import HomeFooter from '../components/Home/Footer/Index.vue';
-import HomeIndex from './Home/Index.vue';
 
 export default {
   name: 'Index',
-  components: { HomeHeader, HomeFooter, HomeIndex },
+  components: { HomeHeader, HomeFooter },
 };
 </script>
 

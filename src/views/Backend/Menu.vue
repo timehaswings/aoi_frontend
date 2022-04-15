@@ -342,4 +342,34 @@ export default {
 .node-operation {
   visibility: hidden;
 }
+
+.el-tree {
+  overflow: auto;
+  height: 100%;
+}
+
+.el-tree::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.el-tree::-webkit-scrollbar-track,
+.el-tree::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 5px solid transparent;
+}
+
+.el-tree::-webkit-scrollbar-track {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2) inset;
+}
+
+.el-tree::-webkit-scrollbar-thumb {
+  min-height: 20px;
+  background-clip: content-box;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) inset;
+}
+
+.el-tree::-webkit-scrollbar-corner {
+  background: transparent;
+}
 </style>

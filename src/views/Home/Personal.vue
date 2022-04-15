@@ -7,28 +7,22 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <el-descriptions title="User Info" :column="1">
-          <el-descriptions-item label="Username">kooriookami</el-descriptions-item>
-          <el-descriptions-item label="Telephone">18100000000</el-descriptions-item>
-          <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-          <el-descriptions-item label="Remarks">
-            <el-tag size="small">School</el-tag>
-          </el-descriptions-item>
-          <el-descriptions-item label="Address">
-            No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu Province
+        <el-descriptions title="个人信息" :column="1">
+          <el-descriptions-item label="用户名">{{ user.username }}</el-descriptions-item>
+          <el-descriptions-item label="邮箱">{{ user.email }}</el-descriptions-item>
+          <el-descriptions-item label="手机">+86 ***</el-descriptions-item>
+          <el-descriptions-item label="加入时间">
+            {{ user.dateJoined }}
           </el-descriptions-item>
         </el-descriptions>
       </el-col>
     </el-row>
-    <el-row style="margin-top: 20px">
+    <el-row style="margin-top: 25px">
       <el-col :span="24">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">会员</el-breadcrumb-item>
-        </el-breadcrumb>
-        <div>ss</div>
+        <el-button type="primary" style="width: 80%" round>成为会员</el-button>
       </el-col>
     </el-row>
-    <el-row style="margin-top: 20px">
+    <el-row style="margin-top: 25px">
       <el-col :span="24">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">观看历史</el-breadcrumb-item>
@@ -36,7 +30,7 @@
         <div>ss</div>
       </el-col>
     </el-row>
-    <el-row style="margin-top: 20px">
+    <el-row style="margin-top: 25px">
       <el-col :span="24">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">收藏</el-breadcrumb-item>
@@ -44,7 +38,7 @@
         <div>ss</div>
       </el-col>
     </el-row>
-    <el-row style="margin-top: 20px">
+    <el-row style="margin-top: 25px">
       <el-col :span="24">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">收藏</el-breadcrumb-item>
@@ -52,7 +46,7 @@
         <div>ss</div>
       </el-col>
     </el-row>
-    <el-row style="margin-top: 20px">
+    <el-row style="margin-top: 25px">
       <el-col :span="24">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">意见反馈</el-breadcrumb-item>
@@ -64,13 +58,22 @@
 </template>
 
 <script>
-import { UserFilled } from '@element-plus/icons';
+import { onMounted, computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'HomePersonal',
-  components: { UserFilled },
-  setup(props) {
-    return {};
+  setup() {
+    const store = useStore();
+    const user = computed(() => {
+      return store.state.auth.user;
+    });
+    onMounted(() => {
+      console.log(user);
+    });
+    return {
+      user,
+    };
   },
 };
 </script>

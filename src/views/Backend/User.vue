@@ -14,8 +14,8 @@
       :del-function="state.del"
     >
       <template #row_is_active="{ row }">
-        <el-tag v-if="row.isActive" size="mini" type="success" effect="dark">已激活</el-tag>
-        <el-tag v-else size="mini" type="danger" effect="dark">未激活</el-tag>
+        <el-tag v-if="row.isActive" size="small" type="success" effect="dark">已激活</el-tag>
+        <el-tag v-else size="small" type="danger" effect="dark">未激活</el-tag>
       </template>
       <template #table_operation="{ row }">
         <vxe-button type="text" status="wraning" icon="el-icon-edit" @click="showGroupModal(row.id)">用户组</vxe-button>

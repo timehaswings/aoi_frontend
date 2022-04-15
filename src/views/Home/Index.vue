@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-height: 80vh">
     <el-carousel :interval="carouselConfig.interval" type="card" :height="carouselConfig.height">
       <el-carousel-item v-for="item in carouselConfig.data" :key="item.id" @click="goDetails(item.id)">
         <el-image :src="item.url" :style="{ height: carouselConfig.height }">

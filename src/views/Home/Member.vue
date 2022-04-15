@@ -31,7 +31,7 @@
     </el-row>
     <el-row style="margin-top: 20px">
       <el-col :span="24">
-        <el-radio-group v-model="queryParams.order" size="mini">
+        <el-radio-group v-model="queryParams.order" size="small">
           <el-radio-button v-for="item in orderList" :key="item.code" :label="item.code">
             {{ item.name }}
           </el-radio-button>
@@ -39,30 +39,9 @@
       </el-col>
     </el-row>
     <el-row style="margin-top: 20px">
-      <el-col :span="24">
-        <div
-          v-masonry="containerId"
-          :horizontal-order="true"
-          transition-duration="0.3s"
-          item-selector=".image-item"
-          :gutter="12"
-        >
-          <div v-for="(item, index) in blocks" :key="index" v-masonry-tile class="item">
-            <el-card class="image-item" :body-style="{ padding: '0px' }">
-              <img :src="item.src" />
-              <div style="padding: 14px">
-                <span>Yummy hamburger</span>
-                <div class="bottom">
-                  <time class="time">2020-01-01</time>
-                  <el-button type="text" class="button">Operating</el-button>
-                </div>
-              </div>
-            </el-card>
-          </div>
-        </div>
-      </el-col>
+      <el-col :span="24"></el-col>
     </el-row>
-    <el-row justify="right" style="margin-top: 20px">
+    <el-row justify="end" style="margin-top: 20px">
       <el-col :span="24">
         <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
       </el-col>

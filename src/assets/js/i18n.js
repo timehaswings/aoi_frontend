@@ -1,7 +1,7 @@
 export default {
   'zh-cn': {
     app: {
-      title: '太阳花',
+      title: '纸鸢',
     },
     header: {
       backendTitle: '后台管理',

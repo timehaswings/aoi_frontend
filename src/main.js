@@ -11,7 +11,6 @@ import errorMonitor from './plugins/errorMonitor';
 import auth from './directives/auth';
 import resize from './directives/resize';
 // import mock from './mock';
-import masonryPlus from './plugins/masonry';
 import 'xe-utils';
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
@@ -27,7 +26,6 @@ errorMonitor.run();
 // 加载插件
 installElementPlus(app);
 videoPlayerPlus(app);
-masonryPlus(app);
 tips(app);
 fontAwesome(app);
 
