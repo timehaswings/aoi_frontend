@@ -43,3 +43,14 @@ export const del = params =>
     method: 'delete',
     params,
   });
+
+/**
+ * 获取用户操作历史
+ * @param {*} params
+ */
+export const history = params =>
+  request({
+    url: '/api/v1/home/personal/operation/history',
+    method: 'get',
+    params,
+  });
